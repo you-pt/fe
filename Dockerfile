@@ -19,3 +19,4 @@ CMD ["npm", "start"]
 # 실행방법
 ## docker build . -t 이미지_이름
 ## docker run -p 3500:3000 -v /usr/src/app/node_modules -v $(pwd):/usr/src/app 이미지_이름
+### https://velog.io/@kansun12/%EB%8F%84%EC%BB%A4%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B3%B4%EA%B8%B0

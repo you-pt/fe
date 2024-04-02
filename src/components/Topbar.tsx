@@ -21,14 +21,6 @@ export default () => {
     // 유저 정보 확인
   }, []);
 
-  const redirectLogin = () => {
-    navigate("/login");
-  };
-
-  const redirectSignUp = () => {
-    navigate("/signup");
-  };
-
   const redirectMyPage = () => {
     navigate("mypage");
   };
