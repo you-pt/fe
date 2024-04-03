@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import Diet from "./pages/Diet";
+import LiveSession from "./pages/Live";
 import { ThemeProvider } from "@material-tailwind/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -15,6 +16,7 @@ root.render(
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/diet" element={<Diet />} />
+          <Route path="/live" element={<LiveSession/>}/>
           {/* <Route path="/login" element={<Login />} /> */}
         </Routes>
       </BrowserRouter>
