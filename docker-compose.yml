@@ -7,7 +7,7 @@ services:
     container_name: "you-pt-fe"
     working_dir: "/usr/src/app"
     ports:
-      - "3500:3000"
+      - "3000:3000"
     volumes:
       - /usr/src/app/node_modules
       # 컨테이너밖: 컨테이너안
