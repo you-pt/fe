@@ -4,8 +4,7 @@ import React, { Component, ChangeEvent } from "react";
 import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
+const APPLICATION_SERVER_URL = process.env.API_URL
 
 interface AppState {
   mySessionId: string;
@@ -189,14 +188,9 @@ class LiveSession extends Component<{}, AppState> {
       <div className="container">
         {!session ? (
           <div id="join">
-            <div id="img-div">
-              <img
-                src="resources/images/openvidu_grey_bg_transp_cropped.png"
-                alt="OpenVidu logo"
-              />
-            </div>
+            
             <div id="join-dialog" className="jumbotron vertical-center">
-              <h1> Join a video session </h1>
+              <h2> YouPT에 오신걸 환영합니다 </h2>
               <form className="form-group" onSubmit={this.joinSession}>
                 <p>
                   <label>Participant: </label>
