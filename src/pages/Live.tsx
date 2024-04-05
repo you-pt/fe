@@ -4,7 +4,8 @@ import React, { Component, ChangeEvent } from "react";
 import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
 
-const APPLICATION_SERVER_URL = process.env.API_URL
+const APPLICATION_SERVER_URL =
+  process.env.API_URL
 
 interface AppState {
   mySessionId: string;
