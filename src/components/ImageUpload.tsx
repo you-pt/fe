@@ -18,7 +18,7 @@ const ImageUpload = () => {
     axios({
       method: "post",
       baseURL: "http://172.22.0.2:3001",
-      url: "/image",
+      url: "/images",
       data: formData,
     })
   }
@@ -31,7 +31,7 @@ const ImageUpload = () => {
         // ref={inputRef}
         onChange={onChange}
       />
-      <button onClick={handleUpload}>안녕</button>
+      <button onClick={handleUpload}>업로드 버튼</button>
     </div>
   );
 };
