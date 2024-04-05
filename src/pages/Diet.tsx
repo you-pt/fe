@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@material-tailwind/react";
+import ImageUpload from "../components/ImageUpload";
 
 interface Menus {
   [key: string]: string;
@@ -87,6 +88,7 @@ const Diet = () => {
           </div>
         );
       })}
+      <ImageUpload />
     </div>
   );
 };
