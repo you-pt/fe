@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@material-tailwind/react";
 import ImageUpload from "../components/ImageUpload";
+import Topbar from "../components/Topbar";
 
 interface Menus {
   [key: string]: string;
@@ -42,6 +43,7 @@ const Diet = () => {
 
   return (
     <div>
+      <Topbar />
       <Button
         placeholder={undefined}
         onPointerEnterCapture={undefined}

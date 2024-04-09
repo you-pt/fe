@@ -28,10 +28,16 @@ export default () => {
   const redirect = (url: string): void => {
     navigate(url);
   };
+  const goHome = (): void => {
+    navigate('/')
+  }
 
   return (
-    <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white">
-      <div className="flex text-2xl font-extrabold items-center">YOU PT</div>
+    <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white h-14">
+      <button 
+        className="flex text-2xl font-extrabold items-center"
+        onClick={goHome}
+      >YOU PT</button>
       {user ? (
         <div>
           <div onClick={redirectMyPage}>마이페이지</div>
