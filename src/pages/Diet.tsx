@@ -21,7 +21,6 @@ const Diet = () => {
   };
 
   const deleteDiet = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    console.log("ckl");
     const { name } = e.target as HTMLButtonElement;
     setMenus((prev) => {
       const { [name]: deleted, ...rest } = prev;
@@ -36,10 +35,6 @@ const Diet = () => {
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    console.log(menus);
-  }, [menus]);
 
   return (
     <div>

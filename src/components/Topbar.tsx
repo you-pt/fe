@@ -9,7 +9,7 @@ interface User {
 }
 
 const redirectData = [
-  { url: "/login", name: "로그인" },
+  { url: "/signin", name: "로그인" },
   { url: "/signup", name: "회원가입" },
   { url: "/diet", name: "식단 관리 AI" },
   { url: "/live", name: "라이브 PT"}
