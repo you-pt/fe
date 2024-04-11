@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default () => {
   const navigate = useNavigate()
   return (
-    <div className="flex justify-center items-center h-screen pb-28">
+    <div className="flex justify-center">
       <Card
         color="transparent"
         shadow={false}

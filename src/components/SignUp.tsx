@@ -1,8 +1,7 @@
-import { Card, Input, Button, Typography, Select, Option } from "@material-tailwind/react";
+import { Card, Input, Button, Typography, Select, Option, Radio, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { handleSubmit, useInputs } from "../utils/inputUtils";
 import { useEffect } from "react";
-import type { SelectProps } from "@material-tailwind/react";
 
 const options = [
   { value: "user", label: "일반 사용자" },
@@ -19,13 +18,13 @@ export default () => {
     role: "",
   });
 
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
+  useEffect(()=>{
+    console.log(inputs)
+  },[inputs])
 
   const navigate = useNavigate();
   return (
-    <div className="flex justify-center items-center h-screen pb-28">
+    <div className="flex justify-center">
       <Card
         color="transparent"
         shadow={false}
@@ -166,7 +165,10 @@ export default () => {
               onPointerLeaveCapture={undefined}
             >
               {options.map((option) => (
-                <Option key={option.value} onClick={(e) => handleInputs(e, {name: "role", value: option.value})}>
+                <Option
+                  key={option.value}
+                  onClick={(e) => handleInputs(e, { name: "role", value: option.value })}
+                >
                   {option.label}
                 </Option>
               ))}
@@ -174,6 +176,41 @@ export default () => {
               <Option value="biz">사업자</Option>
               <Option value="trainer">트레이너</Option> */}
             </Select>
+            <div>
+              <div className="mb-6">
+                <Typography
+                  variant="h6"
+                  color="blue-gray"
+                  className="-mb-3"
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                >
+                  성별
+                </Typography>
+              </div>
+              <div className="flex gap-10">
+                <Radio
+                  name="gender"
+                  label="남성"
+                  value="male"
+                  onChange={handleInputs}
+                  defaultChecked
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  crossOrigin={undefined}
+                />
+                <Radio
+                  name="gender"
+                  label="여성"
+                  value="female"
+                  onChange={handleInputs}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  crossOrigin={undefined}
+                />
+              </div>
+            </div>
           </div>
           {/* <Checkbox
             label={

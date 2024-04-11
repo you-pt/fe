@@ -33,7 +33,7 @@ export default () => {
   }
 
   return (
-    <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white h-14">
+    <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white h-14 fixed z-50 opacity-100">
       <button 
         className="flex text-2xl font-extrabold items-center"
         onClick={goHome}
