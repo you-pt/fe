@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@material-tailwind/react";
 import ImageUpload from "../components/ImageUpload";
+import Topbar from "../components/Topbar";
 
 interface Menus {
   [key: string]: string;
@@ -20,7 +21,6 @@ const Diet = () => {
   };
 
   const deleteDiet = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    console.log("ckl");
     const { name } = e.target as HTMLButtonElement;
     setMenus((prev) => {
       const { [name]: deleted, ...rest } = prev;
@@ -36,12 +36,9 @@ const Diet = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(menus);
-  }, [menus]);
-
   return (
     <div>
+      <Topbar />
       <Button
         placeholder={undefined}
         onPointerEnterCapture={undefined}
