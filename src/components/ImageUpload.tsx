@@ -17,17 +17,25 @@ const ImageUpload = () => {
     const formData = new FormData();
     formData.append("file", img);
     try {
-      const req = await axios({
+      const res = await axios({
         headers: {
           "Content-Type": "multipart/form-data",
         },
         method: "POST",
-        baseURL: "http://127.0.0.1:3001",
+        baseURL: process.env.REACT_APP_BASE_URL,
         url: "/image/upload",
         data: formData,
       });
-      if (req) {
-        setImgUrl(req.data.url);
+      if (res) {
+        setImgUrl(res.data.url);
+        const ai = await axios({
+          method: "POST",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          baseURL: process.env.REACT_APP_BASE_URL,
+          url: "/gpt/processImageAndManageDietDB",
+          data: {imageUrl: res.data.url},
+        });
+        console.log(ai);
       }
     } catch (error) {
       console.log(error);
@@ -46,7 +54,9 @@ const ImageUpload = () => {
       <div>
         {imgUrl && `url : `}
         <u>
-          <a className="text-red-500" href={`${imgUrl}`}>{imgUrl}</a>
+          <a className="text-red-500" href={`${imgUrl}`}>
+            {imgUrl}
+          </a>
         </u>
       </div>
     </div>
