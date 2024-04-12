@@ -1,8 +1,20 @@
-import { Card, Input, Checkbox, Button, Typography } from "@material-tailwind/react";
+import { Card, Button, Typography, Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
+import { useEffect } from "react";
 
 export default () => {
-  const navigate = useNavigate()
+  const [inputs, handleInputs] = useInputs({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    console.log(inputs)
+  },[inputs])
+
   return (
     <div className="flex justify-center">
       <Card
@@ -40,6 +52,8 @@ export default () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              name="email"
+              onChange={handleInputs as React.ChangeEventHandler}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               crossOrigin={undefined}
@@ -62,6 +76,8 @@ export default () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              name="password"
+              onChange={handleInputs as React.ChangeEventHandler}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               crossOrigin={undefined}
@@ -73,6 +89,7 @@ export default () => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
+            onClick={() => handleSubmit("/user/login", inputs) }
           >
             sign in
           </Button>
@@ -84,7 +101,12 @@ export default () => {
             onPointerLeaveCapture={undefined}
           >
             회윈이 아니신가요?{" "}
-            <button onClick={() => {navigate("/signup")}} className="font-medium text-gray-900">
+            <button
+              onClick={() => {
+                navigate("/signup");
+              }}
+              className="font-medium text-gray-900"
+            >
               회원가입
             </button>
           </Typography>

@@ -1,11 +1,22 @@
-import { Card, Input, Button, Typography, Select, Option, Radio, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
+import {
+  Card,
+  Input,
+  Button,
+  Typography,
+  Select,
+  Option,
+  Radio,
+  List,
+  ListItem,
+  ListItemPrefix,
+} from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { handleSubmit, useInputs } from "../utils/inputUtils";
+import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
 import { useEffect } from "react";
 
 const options = [
   { value: "user", label: "일반 사용자" },
-  { value: "biz", label: "사업자" },
+  { value: "admin", label: "관리자" },
   { value: "trainer", label: "트레이너" },
 ];
 
@@ -18,9 +29,10 @@ export default () => {
     role: "",
   });
 
-  useEffect(()=>{
-    console.log(inputs)
-  },[inputs])
+
+  useEffect(() => {
+    console.log(inputs);
+  }, [inputs]);
 
   const navigate = useNavigate();
   return (
@@ -63,7 +75,7 @@ export default () => {
               닉네임
             </Typography>
             <Input
-              onChange={handleInputs}
+              onChange={handleInputs as React.ChangeEventHandler}
               name="nickname"
               size="lg"
               placeholder="nickname"
@@ -86,7 +98,7 @@ export default () => {
               E-mail
             </Typography>
             <Input
-              onChange={handleInputs}
+              onChange={handleInputs as React.ChangeEventHandler}
               name="email"
               size="lg"
               placeholder="name@mail.com"
@@ -109,7 +121,7 @@ export default () => {
               Password
             </Typography>
             <Input
-              onChange={handleInputs}
+              onChange={handleInputs as React.ChangeEventHandler}
               name="password"
               type="password"
               size="lg"
@@ -133,7 +145,7 @@ export default () => {
               Password Confirm
             </Typography>
             <Input
-              onChange={handleInputs}
+              onChange={handleInputs as React.ChangeEventHandler}
               name="passwordConfirm"
               type="password"
               size="lg"
@@ -194,7 +206,7 @@ export default () => {
                   name="gender"
                   label="남성"
                   value="male"
-                  onChange={handleInputs}
+                  onChange={handleInputs as React.ChangeEventHandler}
                   defaultChecked
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
@@ -204,7 +216,7 @@ export default () => {
                   name="gender"
                   label="여성"
                   value="female"
-                  onChange={handleInputs}
+                  onChange={handleInputs as React.ChangeEventHandler}
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                   crossOrigin={undefined}
@@ -239,7 +251,7 @@ export default () => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={() => handleSubmit("/user/register", inputs)}
+            onClick={() => handleSubmit("/user/register", inputs as InputType)}
           >
             회원가입
           </Button>
