@@ -21,9 +21,10 @@ interface propType {
   imgUrl: string | null;
   handleUpload: (e: React.MouseEvent) => void;
   setImg: React.Dispatch<React.SetStateAction<File | null>>;
+  setImgUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const ImageUpload = ({ img, imgUrl, handleUpload, setImg }: propType) => {
+const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl }: propType) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<any>(null);
 
@@ -59,7 +60,7 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg }: propType) => {
         <CardHeader
           shadow={false}
           floated={false}
-          className="h-96"
+          className="h-96 p-1"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
@@ -97,7 +98,7 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg }: propType) => {
           </figure>
           <Button
             variant="outlined"
-            className={`w-full h-full ${!img ? "block": "hidden"}`}
+            className={`w-full h-full hover:scale-105 hover:shadow-none ${!img ? "block": "hidden"}`}
             children={"+ 이미지 첨부"}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -119,15 +120,6 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg }: propType) => {
             accept="image/*"
             onChange={onChange}
           />
-          {/* <button onClick={handleUpload}>업로드 버튼</button> */}
-          <div>
-            {imgUrl && `url : `}
-            <u>
-              <a className="text-red-500" href={`${imgUrl}`}>
-                {imgUrl}
-              </a>
-            </u>
-          </div>
         </CardBody>
         <CardFooter
           className="pt-0"
@@ -138,13 +130,13 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg }: propType) => {
           <Button
             ripple={false}
             fullWidth={true}
-            className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+            className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none"
+            children="식단 분석하기"
+            onClick={handleUpload}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-          >
-            식단 분석하기
-          </Button>
+          />
         </CardFooter>
       </Card>
     </div>

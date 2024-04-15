@@ -38,20 +38,20 @@ export default () => {
         data: formData,
       });
       if (res) setImgUrl(res.data.url);
-      await handleAI()
+      await handleAI(res.data.url)
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleAI = async () => {
+  const handleAI = async (url: string) => {
     try{
       const ai = await axios({
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         baseURL: process.env.REACT_APP_BASE_URL,
         url: "/gpt/processImageAndManageDietDB",
-        data: { imageUrl: imgUrl },
+        data: { imageUrl: url },
       });
       if (ai) {
         setAIReport(ai.data);
@@ -64,7 +64,7 @@ export default () => {
 
   return (
     <div className="flex flex-row gap-6">
-      <ImageUpload img={img} setImg={setImg} handleUpload={handleUpload} imgUrl={imgUrl}/>
+      <ImageUpload img={img} setImg={setImg} handleUpload={handleUpload} imgUrl={imgUrl} setImgUrl={setImgUrl}/>
       <AIReport aiReport={aiReport} />
     </div>
   );
