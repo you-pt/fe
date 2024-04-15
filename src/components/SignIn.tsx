@@ -43,7 +43,7 @@ export default () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              E-mail
+              이메일
             </Typography>
             <Input
               size="lg"
@@ -66,7 +66,7 @@ export default () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              Password
+              비밀번호
             </Typography>
             <Input
               type="password"
@@ -91,7 +91,7 @@ export default () => {
             onPointerLeaveCapture={undefined}
             onClick={() => handleSubmit("/user/login", inputs) }
           >
-            sign in
+            로그인
           </Button>
           <Typography
             color="gray"

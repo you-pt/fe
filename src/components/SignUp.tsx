@@ -95,7 +95,7 @@ export default () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              E-mail
+              이메일
             </Typography>
             <Input
               onChange={handleInputs as React.ChangeEventHandler}
@@ -118,7 +118,7 @@ export default () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              Password
+              비밀번호
             </Typography>
             <Input
               onChange={handleInputs as React.ChangeEventHandler}
@@ -142,7 +142,7 @@ export default () => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              Password Confirm
+              비밀번호 확인
             </Typography>
             <Input
               onChange={handleInputs as React.ChangeEventHandler}

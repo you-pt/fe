@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Bottombar = () => {
+const Footer = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const Bottombar = () => {
   );
 };
 
-export default Bottombar;
+export default Footer;

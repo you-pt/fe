@@ -29,4 +29,5 @@ export const handleSubmit = async (url: string, data: InputType) => {
     headers: { "Content-Type": "application/json" },
     data,
   });
+  console.log(req)
 };
