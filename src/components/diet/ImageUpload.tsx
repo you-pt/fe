@@ -15,6 +15,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { aiReportType } from "./Index";
 
 interface propType {
   img: File | null;
@@ -22,9 +23,10 @@ interface propType {
   handleUpload: (e: React.MouseEvent) => void;
   setImg: React.Dispatch<React.SetStateAction<File | null>>;
   setImgUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  setAIReport: React.Dispatch<React.SetStateAction<aiReportType | null>>;
 }
 
-const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl }: propType) => {
+const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport }: propType) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<any>(null);
 
@@ -84,6 +86,7 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl }: propType)
                 onPointerLeaveCapture={undefined}
                 onClick={() => {
                   setImg(null);
+                  setAIReport(null)
                 }}
               />
               <Typography

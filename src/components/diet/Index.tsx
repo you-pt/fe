@@ -21,7 +21,7 @@ export interface aiReportType {
 export default () => {
   const [img, setImg] = useState<File | null>(null)
   const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [aiReport, setAIReport] = useState<aiReportType>();
+  const [aiReport, setAIReport] = useState<aiReportType | null>(null);
 
   const handleUpload = async () => {
     if (!img) return;
@@ -64,7 +64,7 @@ export default () => {
 
   return (
     <div className="flex flex-row gap-6">
-      <ImageUpload img={img} setImg={setImg} handleUpload={handleUpload} imgUrl={imgUrl} setImgUrl={setImgUrl}/>
+      <ImageUpload img={img} setImg={setImg} handleUpload={handleUpload} imgUrl={imgUrl} setImgUrl={setImgUrl} setAIReport={setAIReport}/>
       <AIReport aiReport={aiReport} />
     </div>
   );
