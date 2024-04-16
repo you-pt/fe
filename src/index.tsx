@@ -9,6 +9,8 @@ import { ThemeProvider } from "@material-tailwind/react";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 
+import axios from "axios";
+
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   // <React.StrictMode>
