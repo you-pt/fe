@@ -11,6 +11,8 @@ import React, { Component, ChangeEvent } from "react";
 // import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
 import SignIn from "../components/live/SignIn";
+import { useNavigate, useParams } from "react-router-dom";
+import { JSX } from "react/jsx-runtime";
 
 const APPLICATION_SERVER_URL = process.env.REACT_API_URL || "http://localhost:3001/";
 
@@ -23,10 +25,26 @@ interface AppState {
   subscribers: Subscriber[];
 }
 
-class LiveSession extends Component<{}, AppState> {
+export const withRouter = (Component: any) => {
+  const Wrapper = (props: any) => {
+    const navigate = useNavigate();
+    const params = useParams();
+
+    return <Component navigate={navigate} params={params} {...props} />;
+  };
+
+  return Wrapper;
+};
+
+interface PropType {
+  navigate: (url: string) => void;
+  params: { sessionId: string };
+}
+
+class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
 
-  constructor(props: {}) {
+  constructor(props: PropType) {
     super(props);
 
     this.state = {
@@ -49,6 +67,12 @@ class LiveSession extends Component<{}, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log(this.props);
+    if (this.props.params.sessionId) {
+      this.setState({
+        mySessionId: this.props.params.sessionId,
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -67,7 +91,7 @@ class LiveSession extends Component<{}, AppState> {
   handleChangeSessionId(e: ChangeEvent<HTMLInputElement>) {
     this.setState({
       mySessionId: e.target.value,
-    });
+    })
   }
 
   handleChangeUserName(e: ChangeEvent<HTMLInputElement>) {
@@ -80,7 +104,7 @@ class LiveSession extends Component<{}, AppState> {
     if (this.state.mainStreamManager !== stream) {
       this.setState({
         mainStreamManager: stream,
-      });
+      })
     }
   }
 
@@ -90,7 +114,7 @@ class LiveSession extends Component<{}, AppState> {
     );
     this.setState({
       subscribers: subscribers,
-    });
+    })
   }
 
   async joinSession() {
@@ -99,13 +123,13 @@ class LiveSession extends Component<{}, AppState> {
     const session = this.OV.initSession();
     this.setState({
       session,
-    });
+    })
 
     session.on("streamCreated", (event) => {
       const subscriber = session.subscribe(event.stream, undefined);
       this.setState({
         subscribers: [...this.state.subscribers, subscriber],
-      });
+      })
     });
 
     session.on("exception", (exception) => {
@@ -130,6 +154,9 @@ class LiveSession extends Component<{}, AppState> {
         mainStreamManager: publisher,
         publisher: publisher,
       });
+      if (!this.props.params.sessionId) {
+        this.props.navigate(this.state.mySessionId);
+      }
     } catch (error: any) {
       console.log("There was an error connecting to the session:", error.code, error.message);
     }
@@ -218,43 +245,49 @@ class LiveSession extends Component<{}, AppState> {
     return (
       <div className="container">
         {!session ? (
-          <SignIn roomDefaultValue={mySessionId} userNameDefaultValue={myUserName} handleChangeSessionId={this.handleChangeSessionId} handleChangeUserName={this.handleChangeUserName} joinSession={this.joinSession} />
-          // <div id="join">
-          //   <div id="join-dialog" className="jumbotron vertical-center">
-          //     <h2> YouPT에 오신걸 환영합니다 </h2>
-          //     <form className="form-group" onSubmit={this.joinSession}>
-          //       <p>
-          //         <label>Participant: </label>
-          //         <input
-          //           className="form-control"
-          //           type="text"
-          //           value={myUserName}
-          //           onChange={this.handleChangeUserName}
-          //           required
-          //         />
-          //       </p>
-          //       <p>
-          //         <label> Session: </label>
-          //         <input
-          //           className="form-control"
-          //           type="text"
-          //           value={mySessionId}
-          //           onChange={this.handleChangeSessionId}
-          //           required
-          //         />
-          //       </p>
-          //       <p className="text-center">
-          //         <input
-          //           className="btn btn-lg btn-success"
-          //           name="commit"
-          //           type="submit"
-          //           value="JOIN"
-          //         />
-          //       </p>
-          //     </form>
-          //   </div>
-          // </div>
-        ) : null}
+          <SignIn
+            roomDefaultValue={mySessionId}
+            userNameDefaultValue={myUserName}
+            handleChangeSessionId={this.handleChangeSessionId}
+            handleChangeUserName={this.handleChangeUserName}
+            joinSession={this.joinSession}
+          />
+        ) : // <div id="join">
+        //   <div id="join-dialog" className="jumbotron vertical-center">
+        //     <h2> YouPT에 오신걸 환영합니다 </h2>
+        //     <form className="form-group" onSubmit={this.joinSession}>
+        //       <p>
+        //         <label>Participant: </label>
+        //         <input
+        //           className="form-control"
+        //           type="text"
+        //           value={myUserName}
+        //           onChange={this.handleChangeUserName}
+        //           required
+        //         />
+        //       </p>
+        //       <p>
+        //         <label> Session: </label>
+        //         <input
+        //           className="form-control"
+        //           type="text"
+        //           value={mySessionId}
+        //           onChange={this.handleChangeSessionId}
+        //           required
+        //         />
+        //       </p>
+        //       <p className="text-center">
+        //         <input
+        //           className="btn btn-lg btn-success"
+        //           name="commit"
+        //           type="submit"
+        //           value="JOIN"
+        //         />
+        //       </p>
+        //     </form>
+        //   </div>
+        // </div>
+        null}
 
         {session ? (
           <div id="session">
@@ -280,13 +313,13 @@ class LiveSession extends Component<{}, AppState> {
               </div>
             ) : null} */}
             {this.state.publisher ? (
-                <div
-                  className="stream-container col-md-6 col-xs-6 block"
-                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-                >
-                  <UserVideoComponent streamManager={this.state.publisher} />
-                </div>
-              ) : null}
+              <div
+                className="stream-container col-md-6 col-xs-6 block"
+                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+              >
+                <UserVideoComponent streamManager={this.state.publisher} />
+              </div>
+            ) : null}
             <div id="video-container" className="block">
               {this.state.subscribers.map((sub, i) => (
                 <div
@@ -306,4 +339,4 @@ class LiveSession extends Component<{}, AppState> {
   }
 }
 
-export default LiveSession;
+export default withRouter(LiveSession);

@@ -19,7 +19,7 @@ root.render(
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/diet" element={<Diet />} />
-          <Route path="/live" element={<LiveSession/>}/>
+          <Route path="/live/:sessionId?" element={<LiveSession/>}/>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
         </Routes>

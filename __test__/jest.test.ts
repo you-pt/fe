@@ -10,10 +10,10 @@ describe("ai report ",() => {
     nock.cleanAll()
 
     nock(apiUrl).post("/user/register").reply(201)
-    nock(apiUrl).post("/user/login").reply(201)
+    nock(apiUrl).post("/user/login").reply(201, {})
   })
 
   test("login", async () => {
-    
+
   })
 })

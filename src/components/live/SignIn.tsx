@@ -8,6 +8,7 @@ import {
   Checkbox,
   Button,
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 interface PropType {
   roomDefaultValue: string;
@@ -24,6 +25,7 @@ export default ({
   handleChangeSessionId,
   handleChangeUserName,
 }: PropType) => {
+
   return (
     <form onSubmit={joinSession}>
       <Card
