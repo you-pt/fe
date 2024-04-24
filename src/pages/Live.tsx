@@ -14,7 +14,7 @@ import SignIn from "../components/live/SignIn";
 import { useNavigate, useParams } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 
-const APPLICATION_SERVER_URL = process.env.REACT_API_URL || "http://localhost:3001/";
+const APPLICATION_SERVER_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001/";
 
 interface AppState {
   mySessionId: string;
@@ -25,8 +25,8 @@ interface AppState {
   subscribers: Subscriber[];
 }
 
-export const withRouter = (Component: any) => {
-  const Wrapper = (props: any) => {
+export const withRouter = (Component: any): React.FC => {
+  const Wrapper = (props: any): React.ReactElement => {
     const navigate = useNavigate();
     const params = useParams();
 
@@ -43,6 +43,8 @@ interface PropType {
 
 class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
+  navigate: (url: string) => void;
+  params: { sessionId: string };
 
   constructor(props: PropType) {
     super(props);
@@ -55,7 +57,8 @@ class LiveSession extends Component<PropType, AppState> {
       publisher: undefined,
       subscribers: [],
     };
-
+    this.navigate = this.props.navigate;
+    this.params = this.props.params;
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -67,11 +70,11 @@ class LiveSession extends Component<PropType, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
-    console.log(this.props);
+    console.log(this.state);
     if (this.props.params.sessionId) {
       this.setState({
         mySessionId: this.props.params.sessionId,
-      })
+      });
     }
   }
 
@@ -91,7 +94,7 @@ class LiveSession extends Component<PropType, AppState> {
   handleChangeSessionId(e: ChangeEvent<HTMLInputElement>) {
     this.setState({
       mySessionId: e.target.value,
-    })
+    });
   }
 
   handleChangeUserName(e: ChangeEvent<HTMLInputElement>) {
@@ -104,7 +107,7 @@ class LiveSession extends Component<PropType, AppState> {
     if (this.state.mainStreamManager !== stream) {
       this.setState({
         mainStreamManager: stream,
-      })
+      });
     }
   }
 
@@ -114,7 +117,7 @@ class LiveSession extends Component<PropType, AppState> {
     );
     this.setState({
       subscribers: subscribers,
-    })
+    });
   }
 
   async joinSession() {
@@ -123,13 +126,13 @@ class LiveSession extends Component<PropType, AppState> {
     const session = this.OV.initSession();
     this.setState({
       session,
-    })
+    });
 
     session.on("streamCreated", (event) => {
       const subscriber = session.subscribe(event.stream, undefined);
       this.setState({
         subscribers: [...this.state.subscribers, subscriber],
-      })
+      });
     });
 
     session.on("exception", (exception) => {
@@ -157,12 +160,40 @@ class LiveSession extends Component<PropType, AppState> {
       if (!this.props.params.sessionId) {
         this.props.navigate(this.state.mySessionId);
       }
+
+      const subscribersData = [...this.state.subscribers].map(subscriber => {
+        const {clientData} = JSON.parse(subscriber.stream.connection.data)
+        return clientData
+      })
+
+      const newParticipant = await axios({
+        method: "POST",
+        baseURL: process.env.REACT_APP_BASE_URL,
+        url: "room-list",
+        headers: { "Content-Type": "application/json" },
+        data: {
+          sessionId: this.state.mySessionId,
+          participant: this.state.myUserName,
+          subscribers: subscribersData
+        },
+      });
+      console.log(subscribersData);
     } catch (error: any) {
       console.log("There was an error connecting to the session:", error.code, error.message);
     }
   }
 
   async leaveSession() {
+    await axios({
+      method:"DELETE",
+      baseURL: process.env.REACT_APP_BASE_URL,
+      url: "/room-list",
+      headers: {"Content-Type":"application/json"},
+      data: {
+        sessionId: this.state.mySessionId,
+        participant: this.state.myUserName
+      }
+    })
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
@@ -239,6 +270,20 @@ class LiveSession extends Component<PropType, AppState> {
     return response.data; // The token
   }
 
+  async handleJoinBtn() {
+    const newParticipant = await axios({
+      method: "POST",
+      baseURL: process.env.REACT_APP_BASE_URL,
+      url: "/room-list",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        sessionId: this.state.mySessionId,
+        participant: this.state.myUserName,
+      },
+    });
+    console.log(newParticipant);
+  }
+
   render() {
     const { mySessionId, myUserName, session, mainStreamManager } = this.state;
 
@@ -252,42 +297,7 @@ class LiveSession extends Component<PropType, AppState> {
             handleChangeUserName={this.handleChangeUserName}
             joinSession={this.joinSession}
           />
-        ) : // <div id="join">
-        //   <div id="join-dialog" className="jumbotron vertical-center">
-        //     <h2> YouPT에 오신걸 환영합니다 </h2>
-        //     <form className="form-group" onSubmit={this.joinSession}>
-        //       <p>
-        //         <label>Participant: </label>
-        //         <input
-        //           className="form-control"
-        //           type="text"
-        //           value={myUserName}
-        //           onChange={this.handleChangeUserName}
-        //           required
-        //         />
-        //       </p>
-        //       <p>
-        //         <label> Session: </label>
-        //         <input
-        //           className="form-control"
-        //           type="text"
-        //           value={mySessionId}
-        //           onChange={this.handleChangeSessionId}
-        //           required
-        //         />
-        //       </p>
-        //       <p className="text-center">
-        //         <input
-        //           className="btn btn-lg btn-success"
-        //           name="commit"
-        //           type="submit"
-        //           value="JOIN"
-        //         />
-        //       </p>
-        //     </form>
-        //   </div>
-        // </div>
-        null}
+        ) : null}
 
         {session ? (
           <div id="session">

@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -9,7 +8,10 @@ import { ThemeProvider } from "@material-tailwind/react";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 
-import axios from "axios";
+import axios from 'axios'
+
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+// axios.defaults.withCredentials = true
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(

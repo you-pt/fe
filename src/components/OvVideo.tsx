@@ -78,7 +78,7 @@ export default class OpenViduVideoComponent extends Component<OpenViduVideoProps
   }
 
   render() {
-    this.runPosenet();
+    // this.runPosenet();
     return (
       <div className="[transform:rotateY(180deg)]">
         <video ref={this.videoRef} className="absolute" />
