@@ -1,18 +1,22 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import Diet from "./pages/Diet";
 import LiveSession from "./pages/Live";
 import { ThemeProvider } from "@material-tailwind/react";
-import ChatRoomPage from "./pages/ChatRoom";
 import SessionListComponent from "./components/streamList/streamList";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+
+import axios from 'axios'
+
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+// axios.defaults.withCredentials = true
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
@@ -21,14 +25,11 @@ root.render(
           <Route path="/live" element={<LiveSession/>}/>
           {/* <Route path="/login" element={<Login />} /> */}
           <Route path = "/list" element={<SessionListComponent/>}/>
-          <Route path="/rooms" element={<ChatRoomPage/>}/>
+          <Route path="/live/:sessionId?" element={<LiveSession/>}/>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

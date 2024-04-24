@@ -1,12 +1,20 @@
-import { OpenVidu, Publisher, Session, StreamEvent, StreamManager, Subscriber } from "openvidu-browser";
+import {
+  OpenVidu,
+  Publisher,
+  Session,
+  StreamEvent,
+  StreamManager,
+  Subscriber,
+} from "openvidu-browser";
 import axios from "axios";
 import React, { Component, ChangeEvent } from "react";
-import "./Live.css";
+// import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
-import { PtStream } from "../components/streamList/PtStream";
+import SignIn from "../components/live/SignIn";
+import { useNavigate, useParams } from "react-router-dom";
+import { JSX } from "react/jsx-runtime";
 
-const APPLICATION_SERVER_URL =
-  process.env.REACT_APP_OPENVIDU_ROOT || "http://localhost:3001/"
+const APPLICATION_SERVER_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001/";
 
 interface AppState {
   mySessionId: string;
@@ -17,10 +25,28 @@ interface AppState {
   subscribers: Subscriber[];
 }
 
-class LiveSession extends Component<{}, AppState> {
-  OV: OpenVidu | null = null;
+export const withRouter = (Component: any): React.FC => {
+  const Wrapper = (props: any): React.ReactElement => {
+    const navigate = useNavigate();
+    const params = useParams();
 
-  constructor(props: {}) {
+    return <Component navigate={navigate} params={params} {...props} />;
+  };
+
+  return Wrapper;
+};
+
+interface PropType {
+  navigate: (url: string) => void;
+  params: { sessionId: string };
+}
+
+class LiveSession extends Component<PropType, AppState> {
+  OV: OpenVidu | null = null;
+  navigate: (url: string) => void;
+  params: { sessionId: string };
+
+  constructor(props: PropType) {
     super(props);
 
     this.state = {
@@ -31,7 +57,8 @@ class LiveSession extends Component<{}, AppState> {
       publisher: undefined,
       subscribers: [],
     };
-
+    this.navigate = this.props.navigate;
+    this.params = this.props.params;
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -43,10 +70,21 @@ class LiveSession extends Component<{}, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log(this.state);
+    if (this.props.params.sessionId) {
+      this.setState({
+        mySessionId: this.props.params.sessionId,
+      });
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
+  }
+
+  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
+    const { publisher, subscribers, mainStreamManager } = this.state;
+    console.log({ publisher, subscribers, mainStreamManager });
   }
 
   onbeforeunload(event: BeforeUnloadEvent) {
@@ -97,12 +135,9 @@ class LiveSession extends Component<{}, AppState> {
       });
     });
 
-
     session.on("exception", (exception) => {
       console.warn(exception);
     });
-
-    
 
     try {
       const token = await this.getToken();
@@ -122,17 +157,43 @@ class LiveSession extends Component<{}, AppState> {
         mainStreamManager: publisher,
         publisher: publisher,
       });
-      await this.createCard( this.state.mySessionId,this.state.myUserName,)
+      if (!this.props.params.sessionId) {
+        this.props.navigate(this.state.mySessionId);
+      }
+
+      const subscribersData = [...this.state.subscribers].map(subscriber => {
+        const {clientData} = JSON.parse(subscriber.stream.connection.data)
+        return clientData
+      })
+
+      const newParticipant = await axios({
+        method: "POST",
+        baseURL: process.env.REACT_APP_BASE_URL,
+        url: "room-list",
+        headers: { "Content-Type": "application/json" },
+        data: {
+          sessionId: this.state.mySessionId,
+          participant: this.state.myUserName,
+          subscribers: subscribersData
+        },
+      });
+      console.log(subscribersData);
     } catch (error: any) {
-      console.log(
-        "There was an error connecting to the session:",
-        error.code,
-        error.message
-      );
+      console.log("There was an error connecting to the session:", error.code, error.message);
     }
   }
 
   async leaveSession() {
+    await axios({
+      method:"DELETE",
+      baseURL: process.env.REACT_APP_BASE_URL,
+      url: "/room-list",
+      headers: {"Content-Type":"application/json"},
+      data: {
+        sessionId: this.state.mySessionId,
+        participant: this.state.myUserName
+      }
+    })
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
@@ -151,16 +212,14 @@ class LiveSession extends Component<{}, AppState> {
   async switchCamera() {
     try {
       const devices = await this.OV!.getDevices();
-      const videoDevices = devices.filter(
-        (device) => device.kind === "videoinput"
-      );
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
 
       if (videoDevices && videoDevices.length > 1) {
         const newVideoDevice = videoDevices.filter(
           (device) =>
-            device.deviceId !== this.state.mainStreamManager!.stream
-              .getMediaStream()
-              .getVideoTracks()[0].getSettings().deviceId
+            device.deviceId !==
+            this.state.mainStreamManager!.stream.getMediaStream().getVideoTracks()[0].getSettings()
+              .deviceId
         );
 
         if (newVideoDevice.length > 0) {
@@ -182,99 +241,6 @@ class LiveSession extends Component<{}, AppState> {
     } catch (e) {
       console.error(e);
     }
-  }
-
-  render() {
-    const { mySessionId, myUserName, session, mainStreamManager } = this.state;
-
-    return (
-      <div className="container">
-        {!session ? (
-          <div id="join">
-            
-            <div id="join-dialog" className="jumbotron vertical-center">
-              <h2> YouPT에 오신걸 환영합니다 </h2>
-              <form className="form-group" onSubmit={this.joinSession}>
-                <p>
-                  <label>Participant: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={myUserName}
-                    onChange={this.handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={mySessionId}
-                    onChange={this.handleChangeSessionId}
-                    required
-                  />
-                </p>
-                <p className="text-center">
-                  <input
-                    className="btn btn-lg btn-success"
-                    name="commit"
-                    type="submit"
-                    value="JOIN"
-                  />
-                </p>
-              </form>
-            </div>
-          </div>
-        ) : null}
-
-        {session ? (
-          <div id="session">
-            <div id="session-header">
-              <h1 id="session-title">{mySessionId}</h1>
-              <input
-                className="btn btn-large btn-danger"
-                type="button"
-                onClick={this.leaveSession}
-                value="Leave session"
-              />
-              <input
-                className="btn btn-large btn-success"
-                type="button"
-                onClick={this.switchCamera}
-                value="Switch Camera"
-              />
-            </div>
-
-            {mainStreamManager ? (
-              <div id="main-video" className="col-md-6">
-                <PtStream userId={this.state.myUserName} roomId={this.state.mySessionId} streamManager={this.state.publisher} />
-              </div>
-            ) : null}
-            <div id="video-container" className="col-md-6">
-              {this.state.publisher ? (
-                <div
-                  className="stream-container col-md-6 col-xs-6"
-                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-                >
-                  <UserVideoComponent streamManager={this.state.publisher} />
-                </div>
-              ) : null}
-              {this.state.subscribers.map((sub, i) => (
-                <div
-                  key={i}
-                  className="stream-container col-md-6 col-xs-6"
-                  onClick={() => this.handleMainVideoStream(sub)}
-                >
-                  <span>{sub.stream.connection.data}</span>
-                  <UserVideoComponent streamManager={sub} />
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </div>
-    );
   }
 
   async getToken() {
@@ -309,13 +275,83 @@ class LiveSession extends Component<{}, AppState> {
     return response.data; // The token
   }
 
-  async createCard( sessionId: string, myUserName: string){
-    const mySessionId = sessionId 
-    const myNickname = myUserName
-    await axios.post(APPLICATION_SERVER_URL+`api/createcard/${mySessionId}/${myNickname}`,{},{
-      headers:{"Content-Type": "application/json"}
-    })
+  async handleJoinBtn() {
+    const newParticipant = await axios({
+      method: "POST",
+      baseURL: process.env.REACT_APP_BASE_URL,
+      url: "/room-list",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        sessionId: this.state.mySessionId,
+        participant: this.state.myUserName,
+      },
+    });
+    console.log(newParticipant);
+  }
+
+  render() {
+    const { mySessionId, myUserName, session, mainStreamManager } = this.state;
+
+    return (
+      <div className="container">
+        {!session ? (
+          <SignIn
+            roomDefaultValue={mySessionId}
+            userNameDefaultValue={myUserName}
+            handleChangeSessionId={this.handleChangeSessionId}
+            handleChangeUserName={this.handleChangeUserName}
+            joinSession={this.joinSession}
+          />
+        ) : null}
+
+        {session ? (
+          <div id="session">
+            <div id="session-header">
+              <h1 id="session-title">{mySessionId}</h1>
+              <input
+                className="btn btn-large btn-danger"
+                type="button"
+                onClick={this.leaveSession}
+                value="Leave session"
+              />
+              <input
+                className="btn btn-large btn-success"
+                type="button"
+                onClick={this.switchCamera}
+                value="Switch Camera"
+              />
+            </div>
+
+            {/* {mainStreamManager ? (
+              <div id="main-video" className="block">
+                <UserVideoComponent streamManager={mainStreamManager} />
+              </div>
+            ) : null} */}
+            {this.state.publisher ? (
+              <div
+                className="stream-container col-md-6 col-xs-6 block"
+                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+              >
+                <UserVideoComponent streamManager={this.state.publisher} />
+              </div>
+            ) : null}
+            <div id="video-container" className="block">
+              {this.state.subscribers.map((sub, i) => (
+                <div
+                  key={i}
+                  className="stream-container col-md-6 col-xs-6"
+                  onClick={() => this.handleMainVideoStream(sub)}
+                >
+                  <span>{sub.stream.connection.data}</span>
+                  <UserVideoComponent streamManager={sub} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
   }
 }
 
-export default LiveSession;
+export default withRouter(LiveSession);

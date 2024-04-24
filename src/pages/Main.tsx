@@ -1,5 +1,6 @@
 import React from "react";
 import Topbar from "../components/Topbar";
+import GymImage from '../assets/gym.avif'
 
 
 const Main = () => {
@@ -11,7 +12,7 @@ const Main = () => {
       <div className="bg-slate-800">
         <img
           className="opacity-75 w-screen h-screen"
-          src="https://img.freepik.com/premium-photo/a-gym-with-treadmills-and-a-window-that-says-gym_860805-2173.jpg?w=1480"
+          src={GymImage}
         />
       </div>
     </div>

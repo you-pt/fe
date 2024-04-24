@@ -12,7 +12,9 @@ services:
       - /usr/src/app/node_modules
       # 컨테이너밖: 컨테이너안
       - .:/usr/src/app
-    command: ["npm", "run", "start"]
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "npm install && npm start"
 # services에 여러 개를 넣으면, 여러 컨테이너를 한번에 실행할 수 있다.
 
 ######### 실행 방법 #########
