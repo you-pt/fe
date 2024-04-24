@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardBody, Typography, Button, CardFooter } from "@material-tailwind/react";
 import ImageUpload from "./ImageUpload";
 import { useState } from "react";
 import AIReport from "./AIReport";

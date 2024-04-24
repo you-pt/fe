@@ -7,9 +7,10 @@ WORKDIR /usr/src/app
 # package*.json으로 나눠놓은 이유
 # 기존에 작성해놓으면, caching을 통해 효율이 더 높음
 COPY package*.json ./
+# 현재 dir를 workdir로 복사
+COPY ./ ./
 # package.json 내용 반영
 RUN npm install
-COPY ./ ./
 
 # 노출 port
 EXPOSE 3000

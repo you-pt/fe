@@ -2,6 +2,7 @@ import { Card, Button, Typography, Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
 import { useEffect } from "react";
+import axios from "axios";
 
 export default () => {
   const [inputs, handleInputs] = useInputs({
@@ -11,9 +12,15 @@ export default () => {
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    console.log(inputs)
-  },[inputs])
+  const handleSignInBtn = async () => {
+    const res = await handleSubmit("/user/login", inputs, true)
+    console.log("res::::::", res);
+    // await axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  };
+
+  useEffect(() => {
+    console.log(inputs);
+  }, [inputs]);
 
   return (
     <div className="flex justify-center">
@@ -89,7 +96,7 @@ export default () => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={() => handleSubmit("/user/login", inputs) }
+            onClick={() => handleSignInBtn()}
           >
             로그인
           </Button>

@@ -20,9 +20,9 @@ export default class UserVideoComponent extends Component<UserVideoProps> {
 
     render() {
         return (
-            <div>
+            <div className=''>
                 {this.props.streamManager ? (
-                    <div className="streamcomponent">
+                    <div className="">
                         <OpenViduVideoComponent streamManager={this.props.streamManager} />
                         <div><p>{this.getNicknameTag()}</p></div>
                     </div>
