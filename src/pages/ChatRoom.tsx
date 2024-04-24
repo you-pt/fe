@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import RoomCard from '../components/RoomCard';
+import RoomCard from '../components/streamList/RoomCard';
 import LiveSession from './Live';
 import {  useNavigate } from 'react-router-dom';
-import ExistRoomCard from '../components/ExistRoomCard';
+import ExistRoomCard from '../components/streamList/ExistRoomCard';
 
 interface UserInfo {
   nickname: string;

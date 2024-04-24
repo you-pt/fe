@@ -16,7 +16,7 @@ function createSession(roomId: string): Promise<string> {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        OPENVIDU_SERVER_URL + "/api/sessions",
+        OPENVIDU_SERVER_URL + "api/sessions",
         { customSessionId: roomId },
         {
           headers: {
@@ -49,7 +49,7 @@ function createToken(roomId: string): Promise<string> {
     const data = {};
     axios
       .post(
-        OPENVIDU_SERVER_URL + "/api/sessions/" + roomId + "/connections",
+        OPENVIDU_SERVER_URL + "api/sessions/" + roomId + "/connections",
         data,
         {
           headers: {

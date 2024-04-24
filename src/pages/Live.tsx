@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { Component, ChangeEvent } from "react";
 import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
-import { PtStream } from "../components/PtStream";
+import { PtStream } from "../components/streamList/PtStream";
 
 const APPLICATION_SERVER_URL =
   process.env.REACT_APP_OPENVIDU_ROOT || "http://localhost:3001/"
@@ -283,14 +283,19 @@ class LiveSession extends Component<{}, AppState> {
   }
 
   async createSession(sessionId: string) {
+    console.log(APPLICATION_SERVER_URL + "api/sessions")
+   try{
     const response = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
+      { customSessionId: sessionId, publishers: "Participant51"},
       {
         headers: { "Content-Type": "application/json" },
       }
     );
     return response.data; // The sessionId
+  }catch(error){
+    console.log(error)
+  }
   }
 
   async createToken(sessionId: string) {

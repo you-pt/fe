@@ -1,7 +1,7 @@
 import { Publisher, StreamManager } from 'openvidu-browser';
 import React, { useEffect, useState } from 'react';
-import { useOpenvidu } from '../hooks/UseOpenvidu';
-import { useStream } from '../hooks/useStream';
+import { useOpenvidu } from '../../hooks/UseOpenvidu';
+import { useStream } from '../../hooks/useStream';
 import  RoundButton  from './RoundButton';
 
 

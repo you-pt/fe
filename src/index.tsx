@@ -8,6 +8,7 @@ import Diet from "./pages/Diet";
 import LiveSession from "./pages/Live";
 import { ThemeProvider } from "@material-tailwind/react";
 import ChatRoomPage from "./pages/ChatRoom";
+import SessionListComponent from "./components/streamList/streamList";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -19,6 +20,7 @@ root.render(
           <Route path="/diet" element={<Diet />} />
           <Route path="/live" element={<LiveSession/>}/>
           {/* <Route path="/login" element={<Login />} /> */}
+          <Route path = "/list" element={<SessionListComponent/>}/>
           <Route path="/rooms" element={<ChatRoomPage/>}/>
         </Routes>
       </BrowserRouter>
