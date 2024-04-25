@@ -13,14 +13,15 @@ export default () => {
   const navigate = useNavigate();
 
   const handleSignInBtn = async () => {
-    const res = await handleSubmit("/user/login", inputs, true)
-    console.log("res::::::", res);
-    // await axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    const res = await axios({
+      method: "POST",
+      url: "user/login",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      data: inputs
+    })
   };
-
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
 
   return (
     <div className="flex justify-center">
@@ -96,7 +97,7 @@ export default () => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={() => handleSignInBtn()}
+            onClick={handleSignInBtn}
           >
             로그인
           </Button>
