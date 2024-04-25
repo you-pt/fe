@@ -2,7 +2,6 @@ import React, { Component, RefObject, useRef } from "react";
 import { StreamManager } from "openvidu-browser";
 import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
-import Webcam from "react-webcam";
 import { drawKeypoints, drawSkeleton } from "../utils/poseUtils";
 
 interface OpenViduVideoProps {
