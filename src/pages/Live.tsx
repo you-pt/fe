@@ -168,7 +168,6 @@ class LiveSession extends Component<PropType, AppState> {
 
       const newParticipant = await axios({
         method: "POST",
-        baseURL: process.env.REACT_APP_BASE_URL,
         url: "room-list",
         headers: { "Content-Type": "application/json" },
         data: {
@@ -186,7 +185,6 @@ class LiveSession extends Component<PropType, AppState> {
   async leaveSession() {
     await axios({
       method:"DELETE",
-      baseURL: process.env.REACT_APP_BASE_URL,
       url: "/room-list",
       headers: {"Content-Type":"application/json"},
       data: {
@@ -252,7 +250,7 @@ class LiveSession extends Component<PropType, AppState> {
     console.log(APPLICATION_SERVER_URL + "api/sessions")
    try{
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
+      "api/sessions",
       { customSessionId: sessionId, publishers: "Participant51"},
       {
         headers: { "Content-Type": "application/json" },
@@ -266,7 +264,7 @@ class LiveSession extends Component<PropType, AppState> {
 
   async createToken(sessionId: string) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + `api/sessions/${sessionId}/connections`,
+      `api/sessions/${sessionId}/connections`,
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -278,7 +276,6 @@ class LiveSession extends Component<PropType, AppState> {
   async handleJoinBtn() {
     const newParticipant = await axios({
       method: "POST",
-      baseURL: process.env.REACT_APP_BASE_URL,
       url: "/room-list",
       headers: { "Content-Type": "application/json" },
       data: {

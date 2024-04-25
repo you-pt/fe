@@ -1,5 +1,5 @@
 import ImageUpload from "./ImageUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AIReport from "./AIReport";
 import axios from "axios";
 
@@ -23,9 +23,15 @@ export default () => {
   const [aiReport, setAIReport] = useState<aiReportType | null>(null);
   const [mealId, setMealId] = useState<number>(0);
   const [newReport, setNewReport] = useState<string>("");
+  const [loading, setLoading] = useState<0 | 1 | 2>(0) // 0: 로딩 x | 1: 로딩 중 | 2: 실패
+
+  useEffect(()=> {
+    setLoading(0)
+  }, [aiReport])
 
   const handleUpload = async () => {
     if (!img) return;
+    setLoading(1)
     const formData = new FormData();
     formData.append("file", img);
     try {
@@ -40,6 +46,7 @@ export default () => {
       if (res) setImgUrl(res.data.url);
       await handleAI(res.data.url);
     } catch (error) {
+      setLoading(2)
       console.log(error);
     }
   };
@@ -103,7 +110,7 @@ export default () => {
         setImgUrl={setImgUrl}
         setAIReport={setAIReport}
       />
-      <AIReport reportAI={aiReport} />
+      <AIReport reportAI={aiReport} loading={loading} />
       <button
         onClick={saveMeal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
