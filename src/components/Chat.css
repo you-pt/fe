@@ -1,0 +1,41 @@
+/* .chat {
+  padding: 20px;
+  height: 100vh;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.message-input {
+  margin-top: 20px;
+}
+
+.message-input input {
+  width: calc(100% - 80px);
+  padding: 8px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.message-input button {
+  padding: 8px 20px;
+  border: none;
+  background-color: #094f81;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.typing-display {
+  margin-top: 10px;
+  font-style: italic;
+} */

@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 
 import axios from 'axios'
+import ChatComponent from "./components/ChatComponent";
 
 axios.defaults.withCredentials = true
 
@@ -24,6 +25,7 @@ root.render(
           <Route path="/live" element={<LiveSession/>}/>
           {/* <Route path="/login" element={<Login />} /> */}
           <Route path = "/list" element={<SessionListComponent/>}/>
+          <Route path = "/chat" element = {<ChatComponent/>}/>
           <Route path="/live/:sessionId?" element={<LiveSession/>}/>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />

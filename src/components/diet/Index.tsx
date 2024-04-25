@@ -12,9 +12,9 @@ export interface diningType {
 }
 
 export interface aiReportType {
-  Dining: diningType[];
-  "Nutrition Information": diningType[];
-  "Evaluation of diet": string;
+  "Diet": diningType[];
+  "Nutrition Info": diningType[];
+  "Evaluation": string;
 }
 
 export default () => {
@@ -32,7 +32,7 @@ export default () => {
           "Content-Type": "multipart/form-data",
         },
         method: "POST",
-        baseURL: process.env.REACT_APP_BASE_URL,
+        baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:3001",
         url: "/image/upload",
         data: formData,
       });
@@ -48,7 +48,7 @@ export default () => {
       const ai = await axios({
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
-        baseURL: process.env.REACT_APP_BASE_URL,
+        baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:3001",
         url: "/gpt/processImageAndManageDietDB",
         data: { imageUrl: url },
       });
@@ -64,7 +64,7 @@ export default () => {
   return (
     <div className="flex flex-row gap-6">
       <ImageUpload img={img} setImg={setImg} handleUpload={handleUpload} imgUrl={imgUrl} setImgUrl={setImgUrl} setAIReport={setAIReport}/>
-      <AIReport aiReport={aiReport} />
+      <AIReport reportAI={aiReport} />
     </div>
   );
 };
