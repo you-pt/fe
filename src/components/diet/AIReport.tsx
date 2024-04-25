@@ -2,23 +2,23 @@ import { Card, CardBody, CardHeader } from "@material-tailwind/react";
 import { aiReportType } from "./Index";
 
 interface propType {
-  aiReport: any;
+  reportAI:any
 }
 
 interface dataType {
-  "Food name": string;
-  "Energy (kcal)": string;
-  "Carbohydrate(g)": string;
-  "Fat(g)": string;
-  "Protein (g)": string;
+  "FoodName": string;
+  "Energy": string;
+  "Carbohydrate": string;
+  "Fat": string;
+  "Protein": string;
 }
 
 function Dining({ dining }: { dining: dataType }) {
-  const foodName = dining?.["Food name"];
-  const energy = dining?.["Energy (kcal)"];
-  const carbohydrate = dining?.["Carbohydrate(g)"];
-  const fat = dining?.["Fat(g)"];
-  const protein = dining?.["Protein (g)"];
+  const foodName = dining?.["FoodName"];
+  const energy = dining?.["Energy"];
+  const carbohydrate = dining?.["Carbohydrate"];
+  const fat = dining?.["Fat"];
+  const protein = dining?.["Protein"];
   return (
     <tr>
       <td>{foodName}</td>
@@ -31,25 +31,51 @@ function Dining({ dining }: { dining: dataType }) {
 }
 
 function NutritionalInfo({ nutritionalInfo }: { nutritionalInfo: Partial<dataType> }) {
-  console.log(nutritionalInfo)
-  const energy = nutritionalInfo?.["Energy (kcal)"];
-  const carbohydrate = nutritionalInfo?.["Carbohydrate(g)"];
-  const fat = nutritionalInfo?.["Fat(g)"];
-  const protein = nutritionalInfo?.["Protein (g)"];
+  console.log(nutritionalInfo);
+  const energy = nutritionalInfo?.["Energy"];
+  const carbohydrate = nutritionalInfo?.["Carbohydrate"];
+  const fat = nutritionalInfo?.["Fat"];
+  const protein = nutritionalInfo?.["Protein"];
+
   return (
-    <div>
-      <div>전체 열량 : {energy}</div>
-      <div>전체 탄수화물 : {carbohydrate}</div>
-      <div>전체 단백질 : {protein}</div>
-      <div>전체 지방 : {fat}</div>
+    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+      <table className="min-w-full leading-normal">
+        <thead>
+          <tr>
+            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-black-300">영양 정보</th>
+            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-black-300">값</th>
+          </tr>
+        </thead>
+        <tbody>
+          <TableRow label="전체 열량" value={energy} />
+          <TableRow label="전체 탄수화물" value={carbohydrate} />
+          <TableRow label="전체 단백질" value={protein} />
+          <TableRow label="전체 지방" value={fat} />
+        </tbody>
+      </table>
     </div>
   );
 }
 
-export default ({ aiReport }: propType) => {
-  const dining = aiReport?.["Dining"];
-  const nutritionalInfo = aiReport?.["Nutritional Information"];
-  const evaluation = aiReport?.["Evaluation of diet"];
+// 각 행을 렌더링하는 TableRow 컴포넌트
+function TableRow({ label, value }: { label: string; value: string |undefined}) {
+  return (
+    <tr>
+      <td className="px-6 py-4 whitespace-nowrap bg-gray-100 text-gray-800 font-semibold border-b border-gray-200">
+        {label}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">
+        {value ?? '-'} {/* 값이 없을 경우 대체 문자열('-') 표시 */}
+      </td>
+    </tr>
+  );
+}
+
+export default ({reportAI }: propType) => {
+  console.log(reportAI)
+  const dining = reportAI?.reportAI?.["Diet"];
+  const nutritionalInfo = reportAI?.reportAI?.["Nutritional Info"];
+  const evaluation = reportAI?.reportAI?.["Evaluation"];
 
   return (
     <Card
@@ -63,19 +89,26 @@ export default ({ aiReport }: propType) => {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       >
-        {aiReport && <div>
-          <table>
+        {reportAI && <div>
+          <table className="min-w-full leading-normal">
             <tr>
-              <th>음식 이름</th>
-              <th>열량 (kcal)</th>
-              <th>탄수화물</th>
-              <th>단백질</th>
-              <th>지방</th>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">음식 이름</th>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">열량 (kcal)</th>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">탄수화물</th>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">단백질</th>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">지방</th>
             </tr>
-            {aiReport && dining.map((c: dataType) => <Dining dining={c} />)}
+            {reportAI && dining.map((c: dataType) => <Dining dining={c} />)}
           </table>
           <NutritionalInfo nutritionalInfo={nutritionalInfo} />
-          <div>결과 : {evaluation}</div>
+          <div>
+          <table className="min-w-full leading-normal">
+            <tr>
+              <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300"> AI 평가</th>
+              <th className="px-6 py-4 whitespace-nowrap border-b border-black-200 w-1/2"> {evaluation}</th>
+            </tr>
+            </table>
+            </div>
         </div>}
       </CardBody>
     </Card>
