@@ -50,7 +50,7 @@ class LiveSession extends Component<PropType, AppState> {
     super(props);
 
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: "",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -202,7 +202,7 @@ class LiveSession extends Component<PropType, AppState> {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
@@ -249,14 +249,19 @@ class LiveSession extends Component<PropType, AppState> {
   }
 
   async createSession(sessionId: string) {
+    console.log(APPLICATION_SERVER_URL + "api/sessions")
+   try{
     const response = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
+      { customSessionId: sessionId, publishers: "Participant51"},
       {
         headers: { "Content-Type": "application/json" },
       }
     );
     return response.data; // The sessionId
+  }catch(error){
+    console.log(error)
+  }
   }
 
   async createToken(sessionId: string) {

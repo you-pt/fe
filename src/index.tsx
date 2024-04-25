@@ -5,6 +5,7 @@ import Main from "./pages/Main";
 import Diet from "./pages/Diet";
 import LiveSession from "./pages/Live";
 import { ThemeProvider } from "@material-tailwind/react";
+import SessionListComponent from "./components/streamList/streamList";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 
@@ -21,6 +22,9 @@ root.render(
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/diet" element={<Diet />} />
+          <Route path="/live" element={<LiveSession/>}/>
+          {/* <Route path="/login" element={<Login />} /> */}
+          <Route path = "/list" element={<SessionListComponent/>}/>
           <Route path="/live/:sessionId?" element={<LiveSession/>}/>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />

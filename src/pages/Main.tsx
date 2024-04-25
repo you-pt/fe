@@ -2,6 +2,7 @@ import React from "react";
 import Topbar from "../components/Topbar";
 import GymImage from '../assets/gym.avif'
 
+
 const Main = () => {
   return (
     <div>
