@@ -2,7 +2,6 @@
   "name": "fe",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001",
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",
     "@reduxjs/toolkit": "^2.2.3",
@@ -17,6 +16,7 @@
     "@types/react-dom": "^18.2.23",
     "axios": "^1.6.8",
     "firebase": "^10.11.1",
+    "http-proxy-middleware": "^3.0.0",
     "multer": "^1.4.5-lts.1",
     "nock": "^13.5.4",
     "openvidu-browser": "^2.29.1",
