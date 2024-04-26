@@ -75,7 +75,7 @@ function TableRow({ label, value }: { label: string; value: string | undefined }
 }
 
 export default ({ reportAI, loading }: propType) => {
-  console.log(reportAI);
+  console.log(reportAI?.reportAI?.["Diet"]);
   const dining = reportAI?.reportAI?.["Diet"];
   const nutritionalInfo = reportAI?.reportAI?.["Nutritional Info"];
   const evaluation = reportAI?.reportAI?.["Evaluation"];

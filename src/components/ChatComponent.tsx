@@ -2,6 +2,7 @@ import { useState, useEffect /** , ChangeEvent, FormEvent*/ } from "react";
 import { io, Socket } from "socket.io-client";
 import "./Chat.css";
 import { useParams } from "react-router-dom";
+const socketEndpoint = process.env.REACT_APP_WEBSOCKET_ENDPOINT as string;
 
 const ChatComponent: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -10,18 +11,23 @@ const ChatComponent: React.FC = () => {
   const [joined, setJoined] = useState(false);
   const [name, setName] = useState("");
   const [typingDisplay, setTypingDisplay] = useState("");
-
+  const { sessionId } = useParams();
+  
+  
+  const newSocket = io(socketEndpoint);
   useEffect(() => {
-    const newSocket = io("http://localhost:5000");
+    console.log(sessionId)
+
+    
     setSocket(newSocket);
-
-    newSocket.emit("findAllMessages", {}, (response:any) => {
-      setMessages(response);
-    });
-
+    
+    findAllmessages()
+    
     newSocket.on("chat", (chat) => {
       setMessages((prevMessages) => [...prevMessages, chat]);
     });
+
+    const intervalId = setInterval(findAllmessages, 3000);
 
     console.log("보내기");
 
@@ -39,24 +45,31 @@ const ChatComponent: React.FC = () => {
 
     /***언마운트시 소켓 연결 해제 */
     return () => {
+      clearInterval(intervalId);
       newSocket.disconnect();
     };
   }, []);
 
-  const { roomId } = useParams();
+  const findAllmessages = () => {newSocket.emit("findAllMessages", {roomId:sessionId}, (response:any) => {
+    setMessages(response);
+  });}
+
+  
 
   const join = () => {
     
     if (socket) {
-      socket.emit("join", { name, roomId }, () => {
+      socket.emit("join", { name, roomId:sessionId }, () => {
         setJoined(true);
+        console.log("조인됨")
       });
     }
   };
 
-  const sendMessage = () => {
+  const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // 기본 동작 방지
     if (socket) {
-      socket.emit("createMessage", { roomId,text: messageText }, () => {
+      socket.emit("createMessage", { roomId:sessionId,text: messageText }, () => {
         setMessageText("");
       });
     }
@@ -66,12 +79,12 @@ const ChatComponent: React.FC = () => {
 
   const emitTyping = () => {
     if (socket) {
-      socket.emit("typing", { isTyping: true });
+      socket.emit("typing", { roomId:sessionId, isTyping: true });
       if (timeout) {
         clearTimeout(timeout);
       }
       timeout = setTimeout(() => {
-        socket.emit("typing", { isTyping: false });
+        socket.emit("typing", { roomId:sessionId, isTyping: false });
       }, 2000);
     }
   };
