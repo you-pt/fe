@@ -13,6 +13,7 @@ import UserVideoComponent from "../components/UserVideoComponent";
 import SignIn from "../components/live/SignIn";
 import { useNavigate, useParams } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
+import ChatComponent from "../components/ChatComponent";
 
 interface AppState {
   mySessionId: string;
@@ -338,8 +339,11 @@ class LiveSession extends Component<PropType, AppState> {
                 </div>
               ))}
             </div>
+            {/* 채팅 컴포넌트 */}
+         <ChatComponent />
           </div>
         ) : null}
+         
       </div>
     );
   }
