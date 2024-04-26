@@ -69,17 +69,31 @@ function SessionListComponent() {
       <h2>Session List</h2>
       <ul>
         {sessionList.map((session) => (
-           <li key={session.sessionName}>
-           <strong>Session Name:</strong> {session.sessionName},{' '}
-           <strong>Participants:</strong> {session.participantNumber}
-           <button
+          <table className="min-w-full leading-normal">
+          <tr>
+            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300"> {session.sessionName}</th>
+            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300"> 참여자 수 : {session.participantNumber}</th>
+            <button
              onClick={() => {
                navigate(`/live/${session.sessionName}`);
              }}
            >
              Join
            </button>
-         </li>
+          </tr>
+          </table>
+          
+        //    <li key={session.sessionName}>
+        //    <strong>Session Name:</strong> {session.sessionName},{' '}
+        //    <strong>Participants:</strong> {session.participantNumber}
+        //    <button
+        //      onClick={() => {
+        //        navigate(`/live/${session.sessionName}`);
+        //      }}
+        //    >
+        //      Join
+        //    </button>
+        //  </li>
         ))}
       </ul>
     </div>
