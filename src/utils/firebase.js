@@ -38,7 +38,11 @@ export const onMessageListener = () => {
   return new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       console.log('OnMessage Payload', payload);
-
+      const options = {
+        body: payload.notification.body
+        , icon: payload.notification.icon
+      }
+      const notification = new Notification(payload.notification.title, options);
       resolve(payload);
     })
   })

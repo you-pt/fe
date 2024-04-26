@@ -14,8 +14,6 @@ import SignIn from "../components/live/SignIn";
 import { useNavigate, useParams } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 
-const APPLICATION_SERVER_URL = process.env.REACT_API_URL || "http://127.0.0.1:3001/";
-
 interface AppState {
   mySessionId: string;
   myUserName: string;
@@ -247,15 +245,13 @@ class LiveSession extends Component<PropType, AppState> {
   }
 
   async createSession(sessionId: string) {
-    console.log(APPLICATION_SERVER_URL + "api/sessions")
    try{
-    const response = await axios.post(
-      "api/sessions",
-      { customSessionId: sessionId, publishers: "Participant51"},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const response = await axios({
+      method:"POST",
+      url: "/api/sessions",
+      headers: { "Content-Type": "application/json" },
+      data: {customSessionId: sessionId, publishers: "Participant51"},
+    })
     return response.data; // The sessionId
   }catch(error){
     console.log(error)
@@ -263,13 +259,11 @@ class LiveSession extends Component<PropType, AppState> {
   }
 
   async createToken(sessionId: string) {
-    const response = await axios.post(
-      `api/sessions/${sessionId}/connections`,
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const response = await axios({
+      method: "POST",
+      url: `api/sessions/${sessionId}/connections`,
+      headers: { "Content-Type": "application/json" },
+    })
     return response.data; // The token
   }
 
