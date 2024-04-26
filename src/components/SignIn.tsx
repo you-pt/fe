@@ -1,11 +1,12 @@
 import { Card, Button, Typography, Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { signin } from "../store/slices/loginSlice";
 import { StateType } from "../store/store";
+import { requestForToken } from "../utils/firebase";
 
 export default () => {
   const [inputs, handleInputs] = useInputs({
@@ -20,13 +21,14 @@ export default () => {
 
   const handleSignInBtn = async () => {
     try {
+      const token = await requestForToken()
       const res = await axios({
         method: "POST",
         url: "user/login",
         headers: {
           "Content-Type": "application/json",
         },
-        data: inputs,
+        data: {...inputs, token},
       });
       if (res.status === 201) {
         dispatch(signin());
