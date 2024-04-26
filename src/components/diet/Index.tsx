@@ -23,15 +23,15 @@ export default () => {
   const [aiReport, setAIReport] = useState<aiReportType | null>(null);
   const [mealId, setMealId] = useState<number>(0);
   const [newReport, setNewReport] = useState<string>("");
-  const [loading, setLoading] = useState<0 | 1 | 2>(0) // 0: 로딩 x | 1: 로딩 중 | 2: 실패
+  const [loading, setLoading] = useState<0 | 1 | 2>(0); // 0: 로딩 x | 1: 로딩 중 | 2: 실패
 
-  useEffect(()=> {
-    setLoading(0)
-  }, [aiReport])
+  useEffect(() => {
+    setLoading(0);
+  }, [aiReport]);
 
   const handleUpload = async () => {
     if (!img) return;
-    setLoading(1)
+    setLoading(1);
     const formData = new FormData();
     formData.append("file", img);
     try {
@@ -46,7 +46,7 @@ export default () => {
       if (res) setImgUrl(res.data.url);
       await handleAI(res.data.url);
     } catch (error) {
-      setLoading(2)
+      setLoading(2);
       console.log(error);
     }
   };
@@ -72,12 +72,14 @@ export default () => {
     if (!aiReport) return;
     try {
       const response = await axios({
-        method:"POST",
-        url:"/gpt/saveMeal",
-        headers: { "Content-Type": "application/json"},
+        method: "POST",
+        url: "/gpt/saveMeal",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
         data: { reportAI: aiReport },
-      })
-      console.log("Meal saved:", response.data);
+      });
+      if (response) {
+        console.log("Meal saved:", response.data);
+      }
     } catch (error) {
       console.error("Save meal error:", error);
     }

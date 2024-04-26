@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { io, Socket } from "socket.io-client";
 
-const socketEndpoint = 'http://localhost:5000'; // NestJS WebSocketGateway의 주소
+const socketEndpoint = "http://localhost:5000"; // NestJS WebSocketGateway의 주소
 
 export interface SessionInfo {
   sessionName: string;
   participantNumber: number;
 }
-
-
 
 function useRealtimeSessionUpdates() {
   const [sessionList, setSessionList] = useState<SessionInfo[]>([]);
@@ -19,11 +17,11 @@ function useRealtimeSessionUpdates() {
     // 웹소켓 연결
     const newSocket = io(socketEndpoint, {
       withCredentials: true,
-      transports: ['websocket'],
+      transports: ["websocket"],
     });
 
-    newSocket.on('connect', () => {
-      console.log('WebSocket connected');
+    newSocket.on("connect", () => {
+      console.log("WebSocket connected");
       // 초기 세션 정보 요청
       fetchSessionInfo();
       // 일정 시간 간격으로 세션 정보 업데이트 요청 설정
@@ -39,8 +37,8 @@ function useRealtimeSessionUpdates() {
       };
     });
 
-    newSocket.on('sessionInfo', (sessionInfo: SessionInfo[]) => {
-      console.log('Received sessionInfo:', sessionInfo);
+    newSocket.on("sessionInfo", (sessionInfo: SessionInfo[]) => {
+      console.log("Received sessionInfo:", sessionInfo);
       setSessionList(sessionInfo);
     });
 
@@ -48,9 +46,8 @@ function useRealtimeSessionUpdates() {
 
     // 세션 정보 요청 함수
     const fetchSessionInfo = () => {
-      newSocket.emit('sessionUpdate');
+      newSocket.emit("sessionUpdate");
     };
-
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   return sessionList;
@@ -65,37 +62,25 @@ function SessionListComponent() {
   }
 
   return (
-    <div>
-      <h2>Session List</h2>
-      <ul>
-        {sessionList.map((session) => (
-          <table className="min-w-full leading-normal">
-          <tr>
-            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300"> {session.sessionName}</th>
-            <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300"> 참여자 수 : {session.participantNumber}</th>
+    <div className="grid grid-cols-4 gap-4">
+      {sessionList.map((session, index) => (
+        <div key={index} className="col-span-1">
+          <div className="grid grid-cols-subgrid gap-4 col-span-3">
+            <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-2">
+              {session.sessionName}
+            </div>
+            <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-1">
+              참여자 수: {session.participantNumber}
+            </div>
             <button
-             onClick={() => {
-               navigate(`/live/${session.sessionName}`);
-             }}
-           >
-             Join
-           </button>
-          </tr>
-          </table>
-          
-        //    <li key={session.sessionName}>
-        //    <strong>Session Name:</strong> {session.sessionName},{' '}
-        //    <strong>Participants:</strong> {session.participantNumber}
-        //    <button
-        //      onClick={() => {
-        //        navigate(`/live/${session.sessionName}`);
-        //      }}
-        //    >
-        //      Join
-        //    </button>
-        //  </li>
-        ))}
-      </ul>
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => navigate(`/live/${session.sessionName}`)}
+            >
+              Join
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
