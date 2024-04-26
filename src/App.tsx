@@ -12,6 +12,7 @@ import { StateType } from "./store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { signin } from "./store/slices/loginSlice";
 import MyPage from "./pages/MyPage";
+import ChatComponent from "./components/ChatComponent";
 
 function App() {
   const isLogin = useSelector((state: StateType) => state.login.isLogin);
@@ -32,6 +33,7 @@ function App() {
       <Route path="/live" element={<LiveSession />} />
       <Route path="/list" element={<SessionListComponent />} />
       <Route path="/live/:sessionId?" element={<LiveSession />} />
+      <Route path="/chat" element={<ChatComponent />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/signin" element={<SignIn />} />
