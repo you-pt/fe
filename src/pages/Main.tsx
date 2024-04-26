@@ -1,11 +1,13 @@
 import React from "react";
 import Topbar from "../components/Topbar";
 import GymImage from '../assets/gym.avif'
+import Notification from "../components/Notification";
 
 
 const Main = () => {
   return (
     <div>
+      <Notification />
       <div className="fixed z-50 opacity-100">
         <Topbar />
       </div>
