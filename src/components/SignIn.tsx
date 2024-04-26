@@ -30,6 +30,7 @@ export default () => {
           "Content-Type": "application/json",
         },
         data: {...inputs, token},
+        withCredentials: true
       });
       if (res.status === 201) {
         dispatch(signin());

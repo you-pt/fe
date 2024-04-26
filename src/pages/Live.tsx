@@ -44,6 +44,7 @@ class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
   navigate: (url: string) => void;
   params: { sessionId: string };
+  baseUrl: string
 
   constructor(props: PropType) {
     super(props);
@@ -65,6 +66,7 @@ class LiveSession extends Component<PropType, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.baseUrl="http://localhost:3001"
   }
 
   componentDidMount() {
@@ -83,6 +85,7 @@ class LiveSession extends Component<PropType, AppState> {
 
   componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
+    console.log(this.baseUrl)
     console.log({ publisher, subscribers, mainStreamManager });
   }
 
@@ -167,6 +170,7 @@ class LiveSession extends Component<PropType, AppState> {
 
       const newParticipant = await axios({
         method: "POST",
+        baseURL: this.baseUrl,
         url: "room-list",
         headers: { "Content-Type": "application/json" },
         data: {
@@ -184,6 +188,7 @@ class LiveSession extends Component<PropType, AppState> {
   async leaveSession() {
     await axios({
       method:"DELETE",
+      baseURL: this.baseUrl,
       url: "/room-list",
       headers: {"Content-Type":"application/json"},
       data: {
@@ -249,6 +254,7 @@ class LiveSession extends Component<PropType, AppState> {
    try{
     const response = await axios({
       method:"POST",
+      baseURL: this.baseUrl,
       url: "/api/sessions",
       headers: { "Content-Type": "application/json" },
       data: {customSessionId: sessionId, publishers: "Participant51"},
@@ -262,6 +268,7 @@ class LiveSession extends Component<PropType, AppState> {
   async createToken(sessionId: string) {
     const response = await axios({
       method: "POST",
+      baseURL: this.baseUrl,
       url: `api/sessions/${sessionId}/connections`,
       headers: { "Content-Type": "application/json" },
     })
@@ -271,6 +278,7 @@ class LiveSession extends Component<PropType, AppState> {
   async handleJoinBtn() {
     const newParticipant = await axios({
       method: "POST",
+      baseURL: this.baseUrl,
       url: "/room-list",
       headers: { "Content-Type": "application/json" },
       data: {
