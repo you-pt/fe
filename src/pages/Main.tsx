@@ -2,11 +2,14 @@ import React from "react";
 import Topbar from "../components/Topbar";
 import GymImage from '../assets/gym.avif'
 import SessionListComponent from "../components/streamList/streamList";
+import Notification from "../components/Notification";
+import axios from "axios";
 
 
 const Main = () => {
   return (
     <div>
+      <Notification />
       <div className="fixed z-50 opacity-100">
         <Topbar />
       </div>

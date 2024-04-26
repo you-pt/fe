@@ -1,8 +1,12 @@
 import { Card, Button, Typography, Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { signin } from "../store/slices/loginSlice";
+import { StateType } from "../store/store";
+import { requestForToken } from "../utils/firebase";
 
 export default () => {
   const [inputs, handleInputs] = useInputs({
@@ -10,17 +14,31 @@ export default () => {
     password: "",
   });
 
+  const isLogin = useSelector((state: StateType) => state.login.isLogin);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const handleSignInBtn = async () => {
-    const res = await handleSubmit("/user/login", inputs, true)
-    console.log("res::::::", res);
-    // await axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    try {
+      const token:any = await requestForToken()
+      localStorage.setItem("noti", token)
+      const res = await axios({
+        method: "POST",
+        url: "user/login",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {...inputs, token},
+      });
+      if (res.status === 201) {
+        dispatch(signin());
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
 
   return (
     <div className="flex justify-center">
@@ -96,7 +114,7 @@ export default () => {
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={() => handleSignInBtn()}
+            onClick={handleSignInBtn}
           >
             로그인
           </Button>

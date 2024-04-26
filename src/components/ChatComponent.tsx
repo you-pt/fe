@@ -39,7 +39,7 @@ const ChatComponent: React.FC = () => {
 
     /***언마운트시 소켓 연결 해제 */
     return () => {
-    //   newSocket.disconnect();
+      newSocket.disconnect();
     };
   }, []);
 

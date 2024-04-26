@@ -1,17 +1,33 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // 로컬 스토리지 사용
-import sessionReducer from "./slices/sessionSlice";
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+// import storage from "redux-persist/lib/storage"; // 로컬 스토리지 사용
+import storage from "redux-persist/lib/storage/session"; // session storage
+import loginReducer from "./slices/loginSlice";
 
-const rootReducer = combineReducers({
-  session: sessionReducer,
+export interface StateType {
+  login: {
+    isLogin: boolean
+  }
+}
+
+export const rootReducer = combineReducers({
+  login: loginReducer,
   // 다른 필요한 리듀서 추가 가능
 });
 
 const persistConfig = {
   key: "root",
-  storage, // 로컬 스토리지 사용
-  whitelist: ["session"], // 영구 저장할 리듀서 지정
+  storage,
+  whitelist: ["loginReducer"], // 영구 저장할 리듀서 지정
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
