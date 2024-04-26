@@ -1,5 +1,5 @@
 import ImageUpload from "./ImageUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AIReport from "./AIReport";
 import axios from "axios";
 
@@ -23,9 +23,15 @@ export default () => {
   const [aiReport, setAIReport] = useState<aiReportType | null>(null);
   const [mealId, setMealId] = useState<number>(0);
   const [newReport, setNewReport] = useState<string>("");
+  const [loading, setLoading] = useState<0 | 1 | 2>(0) // 0: 로딩 x | 1: 로딩 중 | 2: 실패
+
+  useEffect(()=> {
+    setLoading(0)
+  }, [aiReport])
 
   const handleUpload = async () => {
     if (!img) return;
+    setLoading(1)
     const formData = new FormData();
     formData.append("file", img);
     try {
@@ -40,6 +46,7 @@ export default () => {
       if (res) setImgUrl(res.data.url);
       await handleAI(res.data.url);
     } catch (error) {
+      setLoading(2)
       console.log(error);
     }
   };
@@ -64,16 +71,12 @@ export default () => {
   const saveMeal = async () => {
     if (!aiReport) return;
     try {
-      const response = await axios.post(
-        `/saveMeal`,
-        { reportAI: aiReport },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios({
+        method:"POST",
+        url:"/gpt/saveMeal",
+        headers: { "Content-Type": "application/json"},
+        data: { reportAI: aiReport },
+      })
       console.log("Meal saved:", response.data);
     } catch (error) {
       console.error("Save meal error:", error);
@@ -81,18 +84,17 @@ export default () => {
   };
 
   const reportMeal = async () => {
+    if (!newReport || !mealId) return;
     try {
-      const response = await axios.patch(
-        `/reportMeal/${mealId}`,
-        { report: newReport },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Meal updated:", response.data);
+      const response = await axios({
+        method: "PATCH",
+        url: `/gpt/reportMeal/${mealId}`,
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        data: { report: newReport },
+      });
+      if (response) {
+        console.log("Meal updated:", response.data);
+      }
     } catch (error) {
       console.error("Update meal error:", error);
     }
@@ -108,18 +110,18 @@ export default () => {
         setImgUrl={setImgUrl}
         setAIReport={setAIReport}
       />
-      <AIReport reportAI={aiReport} />
+      <AIReport reportAI={aiReport} loading={loading} />
       <button
         onClick={saveMeal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        Save Meal Report
+        AI 평가 저장하기
       </button>
       <button
         onClick={reportMeal}
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
       >
-        Update Meal Report
+        트레이너 평가 작성하기
       </button>
     </div>
   );

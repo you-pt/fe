@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
 import { useEffect } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { signin } from "../store/slices/loginSlice";
+import { StateType } from "../store/store";
 
 export default () => {
   const [inputs, handleInputs] = useInputs({
@@ -10,17 +13,28 @@ export default () => {
     password: "",
   });
 
+  const isLogin = useSelector((state: StateType) => state.login.isLogin);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const handleSignInBtn = async () => {
-    const res = await axios({
-      method: "POST",
-      url: "user/login",
-      headers:{
-        "Content-Type": "application/json",
-      },
-      data: inputs
-    })
+    try {
+      const res = await axios({
+        method: "POST",
+        url: "user/login",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: inputs,
+      });
+      if (res.status === 201) {
+        dispatch(signin());
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
