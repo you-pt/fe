@@ -21,7 +21,8 @@ export default () => {
 
   const handleSignInBtn = async () => {
     try {
-      const token = await requestForToken()
+      const token:any = await requestForToken()
+      localStorage.setItem("noti", token)
       const res = await axios({
         method: "POST",
         url: "user/login",

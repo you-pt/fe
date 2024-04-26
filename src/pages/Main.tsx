@@ -2,6 +2,7 @@ import React from "react";
 import Topbar from "../components/Topbar";
 import GymImage from '../assets/gym.avif'
 import Notification from "../components/Notification";
+import axios from "axios";
 
 
 const Main = () => {

@@ -3,7 +3,7 @@ import toast, {Toaster} from 'react-hot-toast'
 import { requestForToken, onMessageListener } from '../utils/firebase';
 
 const Notification = () => {
-    const {notification, setNotification} = useState({title: '', body: ''});
+    const [notification, setNotification] = useState({title: '', body: ''});
 
     const notify = () => toast(<ToastDisplay />);
 
@@ -21,9 +21,7 @@ const Notification = () => {
             notify();
         }
     })
-
-    requestForToken();
-
+    
     onMessageListener()
     .then((payload) => {
         setNotification({ title: payload?.notification.title, body: payload?.notification.body,})
