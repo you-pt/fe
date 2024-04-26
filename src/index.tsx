@@ -10,9 +10,7 @@ import { store, persistor } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { CookiesProvider } from "react-cookie";
 
-axios.defaults.withCredentials = true;
 axios.defaults.baseURL="http://localhost:3001"
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "http://localhost:3000"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
