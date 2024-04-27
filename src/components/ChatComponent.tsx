@@ -51,6 +51,7 @@ const ChatComponent: React.FC = () => {
   }, []);
 
   const findAllmessages = () => {newSocket.emit("findAllMessages", {roomId:sessionId}, (response:any) => {
+    console.log(response)
     setMessages(response);
   });}
 

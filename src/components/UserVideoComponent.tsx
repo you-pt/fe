@@ -8,6 +8,9 @@ interface UserVideoProps {
 }
 
 export default class UserVideoComponent extends Component<UserVideoProps> {
+    constructor(props:UserVideoProps){
+        super(props)
+    }
 
     getNicknameTag(): string {
         // 사용자의 닉네임을 가져옵니다.
@@ -23,8 +26,8 @@ export default class UserVideoComponent extends Component<UserVideoProps> {
             <div className=''>
                 {this.props.streamManager ? (
                     <div className="">
-                        <OpenViduVideoComponent streamManager={this.props.streamManager} />
                         <div><p>{this.getNicknameTag()}</p></div>
+                        <OpenViduVideoComponent streamManager={this.props.streamManager} />
                     </div>
                 ) : null}
             </div>

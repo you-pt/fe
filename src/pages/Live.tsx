@@ -14,6 +14,8 @@ import SignIn from "../components/live/SignIn";
 import { useNavigate, useParams } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import ChatComponent from "../components/ChatComponent";
+import { Button } from "@material-tailwind/react";
+import Topbar from "../components/Topbar";
 
 interface AppState {
   mySessionId: string;
@@ -44,7 +46,7 @@ class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
   navigate: (url: string) => void;
   params: { sessionId: string };
-  baseUrl: string
+  baseUrl: string;
 
   constructor(props: PropType) {
     super(props);
@@ -66,7 +68,7 @@ class LiveSession extends Component<PropType, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.baseUrl="http://localhost:3001"
+    this.baseUrl = "http://localhost:3001";
   }
 
   componentDidMount() {
@@ -85,7 +87,7 @@ class LiveSession extends Component<PropType, AppState> {
 
   componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
-    console.log(this.baseUrl)
+    console.log(this.baseUrl);
     console.log({ publisher, subscribers, mainStreamManager });
   }
 
@@ -163,10 +165,10 @@ class LiveSession extends Component<PropType, AppState> {
         this.props.navigate(this.state.mySessionId);
       }
 
-      const subscribersData = [...this.state.subscribers].map(subscriber => {
-        const {clientData} = JSON.parse(subscriber.stream.connection.data)
-        return clientData
-      })
+      const subscribersData = [...this.state.subscribers].map((subscriber) => {
+        const { clientData } = JSON.parse(subscriber.stream.connection.data);
+        return clientData;
+      });
 
       const newParticipant = await axios({
         method: "POST",
@@ -176,7 +178,7 @@ class LiveSession extends Component<PropType, AppState> {
         data: {
           sessionId: this.state.mySessionId,
           participant: this.state.myUserName,
-          subscribers: subscribersData
+          subscribers: subscribersData,
         },
       });
       console.log(subscribersData);
@@ -187,15 +189,15 @@ class LiveSession extends Component<PropType, AppState> {
 
   async leaveSession() {
     await axios({
-      method:"DELETE",
+      method: "DELETE",
       // baseURL: this.baseUrl,
       url: "/room-list",
-      headers: {"Content-Type":"application/json"},
+      headers: { "Content-Type": "application/json" },
       data: {
         sessionId: this.state.mySessionId,
-        participant: this.state.myUserName
-      }
-    })
+        participant: this.state.myUserName,
+      },
+    });
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
@@ -209,7 +211,7 @@ class LiveSession extends Component<PropType, AppState> {
       mainStreamManager: undefined,
       publisher: undefined,
     });
-    this.navigate("/")
+    this.navigate("/");
   }
 
   async switchCamera() {
@@ -252,18 +254,18 @@ class LiveSession extends Component<PropType, AppState> {
   }
 
   async createSession(sessionId: string) {
-   try{
-    const response = await axios({
-      method:"POST",
-      // baseURL: this.baseUrl,
-      url: "/api/sessions",
-      headers: { "Content-Type": "application/json" },
-      data: {customSessionId: sessionId, publishers: "Participant51"},
-    })
-    return response.data; // The sessionId
-  }catch(error){
-    console.log(error)
-  }
+    try {
+      const response = await axios({
+        method: "POST",
+        // baseURL: this.baseUrl,
+        url: "/api/sessions",
+        headers: { "Content-Type": "application/json" },
+        data: { customSessionId: sessionId, publishers: "Participant51" },
+      });
+      return response.data; // The sessionId
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async createToken(sessionId: string) {
@@ -272,7 +274,7 @@ class LiveSession extends Component<PropType, AppState> {
       // baseURL: this.baseUrl,
       url: `api/sessions/${sessionId}/connections`,
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return response.data; // The token
   }
 
@@ -294,7 +296,9 @@ class LiveSession extends Component<PropType, AppState> {
     const { mySessionId, myUserName, session, mainStreamManager } = this.state;
 
     return (
-      <div className="container">
+      <div>
+        <Topbar />
+        <div className="pt-20">
         {!session ? (
           <SignIn
             roomDefaultValue={mySessionId}
@@ -306,21 +310,31 @@ class LiveSession extends Component<PropType, AppState> {
         ) : null}
 
         {session ? (
-          <div id="session">
-            <div id="session-header">
-              <h1 id="session-title">{mySessionId}</h1>
-              <input
-                className="btn btn-large btn-danger"
-                type="button"
-                onClick={this.leaveSession}
-                value="Leave session"
-              />
-              <input
-                className="btn btn-large btn-success"
-                type="button"
-                onClick={this.switchCamera}
-                value="Switch Camera"
-              />
+          <div>
+            <div className="flex flex-row justify-between items-center">
+              <h1>Room Name: {mySessionId}</h1>
+              <div className="flex flex-row gap-3">
+                <Button
+                  size="sm"
+                  color="red"
+                  variant="gradient"
+                  children={"Leave Session"}
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  onClick={this.leaveSession}
+                />
+                <Button
+                  size="sm"
+                  color="amber"
+                  variant="gradient"
+                  children={"Switch Camera"}
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  onClick={this.switchCamera}
+                />
+              </div>
             </div>
 
             {/* {mainStreamManager ? (
@@ -328,31 +342,53 @@ class LiveSession extends Component<PropType, AppState> {
                 <UserVideoComponent streamManager={mainStreamManager} />
               </div>
             ) : null} */}
-            {this.state.publisher ? (
-              <div
-                className="stream-container col-md-6 col-xs-6 block"
-                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-              >
-                <UserVideoComponent streamManager={this.state.publisher} />
-              </div>
-            ) : null}
-            <div id="video-container" className="block">
+            <div className="grid grid-cols-4 grid-rows-2 gap-4">
+              {this.state.publisher ? (
+                <div
+                  className="row-span-2 col-span-2"
+                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+                >
+                  <UserVideoComponent streamManager={this.state.publisher} />
+                </div>
+              ) : null}
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={i}
-                  className="stream-container col-md-6 col-xs-6"
+                  className="row-span-1 col-span-1"
                   onClick={() => this.handleMainVideoStream(sub)}
                 >
-                  <span>{sub.stream.connection.data}</span>
+                  {/* <span>{sub.stream.connection.data}</span> */}
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
             </div>
+            {/* <div className="flex flex-row gap-1">
+              <div className="basis-2/3">
+                {this.state.publisher ? (
+                  <div
+                    className=""
+                    onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+                  >
+                    <UserVideoComponent streamManager={this.state.publisher} />
+                  </div>
+                ) : null}
+              </div>
+              <div className="basis-1/3">
+                <div className="flex flex-col gap-1">
+                  {this.state.subscribers.map((sub, i) => (
+                    <div key={i} className="" onClick={() => this.handleMainVideoStream(sub)}>
+                      <span>{sub.stream.connection.data}</span>
+                      <UserVideoComponent streamManager={sub} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div> */}
             {/* 채팅 컴포넌트 */}
-         <ChatComponent />
+            <ChatComponent />
           </div>
         ) : null}
-         
+      </div>
       </div>
     );
   }

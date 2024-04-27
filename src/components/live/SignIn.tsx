@@ -27,7 +27,7 @@ export default ({
 }: PropType) => {
 
   return (
-    <form onSubmit={joinSession}>
+    <form onSubmit={joinSession} className="flex justify-center">
       <Card
         className="w-96"
         placeholder={undefined}
