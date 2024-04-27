@@ -85,9 +85,12 @@ class LiveSession extends Component<PropType, AppState> {
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
-  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
+  componentDidUpdate(
+    prevProps: Readonly<{}>,
+    prevState: Readonly<AppState>,
+    snapshot?: any
+  ): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
-    console.log(this.baseUrl);
     console.log({ publisher, subscribers, mainStreamManager });
   }
 
@@ -183,7 +186,11 @@ class LiveSession extends Component<PropType, AppState> {
       });
       console.log(subscribersData);
     } catch (error: any) {
-      console.log("There was an error connecting to the session:", error.code, error.message);
+      console.log(
+        "There was an error connecting to the session:",
+        error.code,
+        error.message
+      );
     }
   }
 
@@ -217,14 +224,18 @@ class LiveSession extends Component<PropType, AppState> {
   async switchCamera() {
     try {
       const devices = await this.OV!.getDevices();
-      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
 
       if (videoDevices && videoDevices.length > 1) {
         const newVideoDevice = videoDevices.filter(
           (device) =>
             device.deviceId !==
-            this.state.mainStreamManager!.stream.getMediaStream().getVideoTracks()[0].getSettings()
-              .deviceId
+            this.state
+              .mainStreamManager!.stream.getMediaStream()
+              .getVideoTracks()[0]
+              .getSettings().deviceId
         );
 
         if (newVideoDevice.length > 0) {
@@ -342,15 +353,15 @@ class LiveSession extends Component<PropType, AppState> {
                 <UserVideoComponent streamManager={mainStreamManager} />
               </div>
             ) : null} */}
-            <div className="grid grid-cols-4 grid-rows-2 gap-4">
-              {this.state.publisher ? (
-                <div
-                  className="row-span-2 col-span-2"
-                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-                >
-                  <UserVideoComponent streamManager={this.state.publisher} />
-                </div>
-              ) : null}
+            {this.state.publisher ? (
+              <div
+                className="stream-container col-md-6 col-xs-6 block"
+                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+              >
+                <UserVideoComponent streamManager={this.state.publisher} />
+              </div>
+            ) : null}
+            <div id="video-container" className="block">
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={i}
@@ -388,8 +399,9 @@ class LiveSession extends Component<PropType, AppState> {
             <ChatComponent />
           </div>
         ) : null}
+         
       </div>
-      </div>
+      <
     );
   }
 }
