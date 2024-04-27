@@ -30,12 +30,14 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
   const inputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<any>(null);
 
-  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
+      console.log("nothing")
       return;
     }
+    console.log('image update')
     setImg(e.target.files[0]);
-  }, []);
+  }
 
   // 이미지 추가되면 img에 보이기
   useLayoutEffect(() => {
@@ -51,10 +53,16 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
     }
   }, [img]);
 
+  const removeImage = () => {
+    console.log("remove")
+    setImg(null);
+    setAIReport(null);
+  };
+
   return (
     <div>
       <Card
-        className="w-96 h-full"
+        className="w-72 h-[calc(100vh-5rem)] flex flex-col justify-between"
         placeholder={undefined}
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
@@ -62,12 +70,31 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
         <CardHeader
           shadow={false}
           floated={false}
-          className="h-96 p-1"
+          className="pb-2"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
-          <figure className={`relative h-96 w-full ${img ? "block": "hidden"}`}>
+          {img && <Button
+            className="w-full shadow-none hover:scale-105 hover:shadow-none"
+            children={"이미지 변경하기"}
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+            onClick={() => {
+              inputRef.current?.click();
+            }}
+          />}
+          
+          
+        </CardHeader>
+        <CardBody
+        className="h-full"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
+          <figure className={`relative h-96 w-full ${img ? "block" : "hidden"}`}>
             <img
               ref={imgRef}
               className={`h-full w-full rounded-xl object-center object-contain`}
@@ -78,17 +105,7 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
               ${img ? "block" : "hidden"}
               `}
             >
-              <Button
-                className=""
-                children={"X"}
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                onClick={() => {
-                  setImg(null);
-                  setAIReport(null)
-                }}
-              />
+              
               <Typography
                 variant="h5"
                 color="blue-gray"
@@ -101,7 +118,9 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
           </figure>
           <Button
             variant="outlined"
-            className={`w-full h-full hover:scale-105 hover:shadow-none ${!img ? "block": "hidden"}`}
+            className={`w-full h-full hover:scale-105 hover:shadow-none ${
+              !img ? "block" : "hidden"
+            }`}
             children={"+ 이미지 첨부"}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -110,12 +129,6 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
               inputRef.current?.click();
             }}
           />
-        </CardHeader>
-        <CardBody
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        >
           <input
             className="hidden"
             ref={inputRef}

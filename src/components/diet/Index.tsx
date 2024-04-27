@@ -20,7 +20,7 @@ export interface aiReportType {
 export default () => {
   const [img, setImg] = useState<File | null>(null);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [aiReport, setAIReport] = useState<aiReportType | null>(null);
+  const [aiReport, setAIReport] = useState<aiReportType | any>({"reportAI":{"Diet":[{"FoodName":"Fried rice with bits of ham","Energy":400,"Carbohydrate":50,"Fat":15,"Protein":20},{"FoodName":"Skewered and grilled meat, possibly chicken","Energy":300,"Carbohydrate":0,"Fat":10,"Protein":25},{"FoodName":"Kimchi","Energy":20,"Carbohydrate":4,"Fat":0,"Protein":1},{"FoodName":"Spicy stir-fried vegetables or noodles","Energy":250,"Carbohydrate":30,"Fat":8,"Protein":5},{"FoodName":"Soup with green vegetables and possibly tofu","Energy":100,"Carbohydrate":15,"Fat":3,"Protein":5},{"FoodName":"Green grapes","Energy":50,"Carbohydrate":15,"Fat":0,"Protein":1}],"Nutritional Info":{"Energy":1120,"Carbohydrate":114,"Fat":36,"Protein":57},"Evaluation":"Your menu is well-balanced and nutritious. It includes a good mix of carbohydrates, fats, and proteins from a variety of sources such as grains, meats, vegetables, and fruits. Keep up the good work!"}});
   const [mealId, setMealId] = useState<number>(0);
   const [newReport, setNewReport] = useState<string>("");
   const [loading, setLoading] = useState<0 | 1 | 2>(0); // 0: 로딩 x | 1: 로딩 중 | 2: 실패
@@ -113,7 +113,7 @@ export default () => {
         setAIReport={setAIReport}
       />
       <AIReport reportAI={aiReport} loading={loading} />
-      <button
+      {/* <button
         onClick={saveMeal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
@@ -124,7 +124,7 @@ export default () => {
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
       >
         트레이너 평가 작성하기
-      </button>
+      </button> */}
     </div>
   );
 };

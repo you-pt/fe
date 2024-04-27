@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loginState, signout } from "../store/slices/loginSlice";
 import { StateType } from "../store/store";
+import { useCookies } from "react-cookie";
 
 interface User {
   email: string;
@@ -26,12 +27,13 @@ const redirectDataLogin = [
 
 export default () => {
   const [user, setUser] = useState<User | undefined>();
+  const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const navigate = useNavigate();
   const location = useLocation();
   const isLogin = useSelector((state: StateType) => {
     return state.login.isLogin;
   });
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const redirect = (url: string): void => {
     navigate(url);
@@ -40,10 +42,9 @@ export default () => {
     navigate("/");
   };
   const handleLogout = () => {
-    //  const 
-    // dispatch(signout());
+    dispatch(signout());
     // if ()
-  }
+  };
 
   return (
     <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white h-14 fixed z-50 opacity-100">
@@ -59,12 +60,12 @@ export default () => {
             onPointerLeaveCapture={undefined}
           >
             <Button
-                children={"로그아웃"}
-                onClick={handleLogout}
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              />
+              children={"로그아웃"}
+              onClick={handleLogout}
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
             {redirectDataLogin.map((data) => (
               <Button
                 children={data.name}
