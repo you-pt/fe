@@ -96,7 +96,7 @@ const ChatComponent: React.FC = () => {
 
   /** tailwind(css)...*/
   return (
-    <div className="chat flex flex-col h-full">
+    <div className="chat flex flex-col flex-grow">
       {joined ? (
         <div className="flex-grow flex justify-center items-center">
           <form onSubmit={join} className="flex flex-col items-center">
@@ -119,29 +119,34 @@ const ChatComponent: React.FC = () => {
           </form>
         </div>
       ) : (
-        <div className="chat-container flex-grow flex flex-col mb-4">
-          {/* 메세지가 채팅창 바로 위에 아래서 위로 올라오게 */}
-          <div className="w-3/4 bg-gray-200 p-2 rounded">
-            <div className="messages-container flex-grow overflow-auto flex flex-col-reverse">
-              <div className="flex-grow">
-                {messages.slice(-5).map((message, index) => (
-                  <div key={index} className="mb-1">
-                    <span className="font-bold">{message.name}</span>:{" "}
-                    {message.text}
-                  </div>
-                ))}
+        <div className="chat-container flex-grow flex flex-col">
+          {/* <div className="messages-container flex-grow overflow-auto">
+            {messages.map((message, index) => (
+              <div key={index} className="mb-1">
+                <span className="font-bold">{message.name}</span>:{" "}
+                {message.text}
               </div>
-            </div>
-          </div>
-
-          {typingDisplay && (
-            <div className="typing-display">{typingDisplay}</div>
-          )}
-
-          <hr className="my-2" />
+            ))}
+          </div> */}
 
           <div className="message-input">
-            <form onSubmit={sendMessage} className="flex items-center">
+            {/* 입력창 바로 위에 메시지가 표시되도록 조정 */}
+            <div className="chat-container flex-grow flex flex-col mb-4">
+              {/* 메세지가 채팅창 바로 위에 아래서 위로 올라오게 */}
+              <div className="w-3/4 bg-gray-200 p-2 rounded">
+                <div className="messages-container flex-grow overflow-auto flex flex-col-reverse">
+                  <div className="flex-grow">
+                    {messages.slice(-5).map((message, index) => (
+                      <div key={index} className="mb-1">
+                        <span className="font-bold">{message.name}</span>:{" "}
+                        {message.text}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <form onSubmit={sendMessage} className="flex items-center w-3/4">
               <label htmlFor="message" className="mr-2">
                 Message:
               </label>

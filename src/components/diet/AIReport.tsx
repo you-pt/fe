@@ -120,19 +120,6 @@ export default ({ reportAI, loading }: propType) => {
                 <div className="w-24 bg-gray-200 p-6">AI 평가</div>
                 <div className="p-6">{evaluation}</div>
               </div>
-              
-              {/* <table className="min-w-full leading-normal">
-                <tr>
-                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                    {" "}
-                    AI 평가
-                  </th>
-                  <th className="px-6 py-4 whitespace-nowrap border-b border-black-200 w-10 break-words">
-                    {" "}
-                    {evaluation}
-                  </th>
-                </tr>
-              </table> */}
             </div>
           </div>
         )}
