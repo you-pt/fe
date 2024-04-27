@@ -12,17 +12,15 @@ const ChatComponent: React.FC = () => {
   const [name, setName] = useState("");
   const [typingDisplay, setTypingDisplay] = useState("");
   const { sessionId } = useParams();
-  
-  
+
   const newSocket = io(socketEndpoint);
   useEffect(() => {
-    console.log(sessionId)
+    console.log(sessionId);
 
-    
     setSocket(newSocket);
-    
-    findAllmessages()
-    
+
+    findAllmessages();
+
     newSocket.on("chat", (chat) => {
       setMessages((prevMessages) => [...prevMessages, chat]);
     });
@@ -50,18 +48,21 @@ const ChatComponent: React.FC = () => {
     };
   }, []);
 
-  const findAllmessages = () => {newSocket.emit("findAllMessages", {roomId:sessionId}, (response:any) => {
-    setMessages(response);
-  });}
-
-  
+  const findAllmessages = () => {
+    newSocket.emit(
+      "findAllMessages",
+      { roomId: sessionId },
+      (response: any) => {
+        setMessages(response);
+      }
+    );
+  };
 
   const join = () => {
-    
     if (socket) {
-      socket.emit("join", { name, roomId:sessionId }, () => {
+      socket.emit("join", { name, roomId: sessionId }, () => {
         setJoined(true);
-        console.log("조인됨")
+        console.log("조인됨");
       });
     }
   };
@@ -69,9 +70,13 @@ const ChatComponent: React.FC = () => {
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // 기본 동작 방지
     if (socket) {
-      socket.emit("createMessage", { roomId:sessionId,text: messageText }, () => {
-        setMessageText("");
-      });
+      socket.emit(
+        "createMessage",
+        { roomId: sessionId, text: messageText },
+        () => {
+          setMessageText("");
+        }
+      );
     }
   };
 
@@ -79,12 +84,12 @@ const ChatComponent: React.FC = () => {
 
   const emitTyping = () => {
     if (socket) {
-      socket.emit("typing", { roomId:sessionId, isTyping: true });
+      socket.emit("typing", { roomId: sessionId, isTyping: true });
       if (timeout) {
         clearTimeout(timeout);
       }
       timeout = setTimeout(() => {
-        socket.emit("typing", { roomId:sessionId, isTyping: false });
+        socket.emit("typing", { roomId: sessionId, isTyping: false });
       }, 2000);
     }
   };
@@ -114,14 +119,19 @@ const ChatComponent: React.FC = () => {
           </form>
         </div>
       ) : (
-        <div className="chat-container flex-grow flex flex-col">
-          <div className="messages-container flex-grow overflow-auto">
-            {messages.map((message, index) => (
-              <div key={index} className="mb-1">
-                <span className="font-bold">{message.name}</span>:{" "}
-                {message.text}
+        <div className="chat-container flex-grow flex flex-col mb-4">
+          {/* 메세지가 채팅창 바로 위에 아래서 위로 올라오게 */}
+          <div className="w-3/4 bg-gray-200 p-2 rounded">
+            <div className="messages-container flex-grow overflow-auto flex flex-col-reverse">
+              <div className="flex-grow">
+                {messages.slice(-5).map((message, index) => (
+                  <div key={index} className="mb-1">
+                    <span className="font-bold">{message.name}</span>:{" "}
+                    {message.text}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
           {typingDisplay && (

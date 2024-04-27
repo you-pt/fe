@@ -23,8 +23,8 @@ const lineWidth = 2;
 
 export const tryResNetButtonName = "tryResNetButton";
 export const tryResNetButtonText = "[New] Try ResNet50";
-const tryResNetButtonTextCss = "width:100%;text-decoration:underline;";
-const tryResNetButtonBackgroundCss = "background:#e61d5f;";
+// const tryResNetButtonTextCss = "width:100%;text-decoration:underline;";
+// const tryResNetButtonBackgroundCss = "background:#e61d5f;";
 
 // function isAndroid() {
 //   return /Android/i.test(navigator.userAgent);
@@ -125,10 +125,19 @@ export function drawSkeleton(
   ctx: CanvasRenderingContext2D,
   scale = 1
 ) {
-  const adjacentKeyPoints = posenet.getAdjacentKeyPoints(keypoints, minConfidence);
+  const adjacentKeyPoints = posenet.getAdjacentKeyPoints(
+    keypoints,
+    minConfidence
+  );
 
   adjacentKeyPoints.forEach((keypoints) => {
-    drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
+    drawSegment(
+      toTuple(keypoints[0].position),
+      toTuple(keypoints[1].position),
+      color,
+      scale,
+      ctx
+    );
   });
 }
 
@@ -229,8 +238,8 @@ export function drawHeatMapValues(
   outputStride: posenet.PoseNetOutputStride,
   canvas: HTMLCanvasElement
 ) {
-  console.log({ heatMapValues, outputStride, canvas})
-  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
+  console.log({ heatMapValues, outputStride, canvas });
+  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
   const radius = 5;
   const scaledValues = heatMapValues.mul(tf.scalar(outputStride, "int32"));
 
@@ -243,7 +252,7 @@ export function drawHeatMapValues(
  */
 function drawPoints(ctx: any, points: any, radius: number, color: string) {
   const data = points.buffer().values;
-  ctx.clearRect(0,0,ctx.width,ctx.height);
+  ctx.clearRect(0, 0, ctx.width, ctx.height);
 
   for (let i = 0; i < data.length; i += 2) {
     const pointY = data[i];
