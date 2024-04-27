@@ -44,7 +44,7 @@ class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
   navigate: (url: string) => void;
   params: { sessionId: string };
-  baseUrl: string
+  baseUrl: string;
 
   constructor(props: PropType) {
     super(props);
@@ -66,7 +66,7 @@ class LiveSession extends Component<PropType, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.baseUrl="http://localhost:3001"
+    this.baseUrl = "http://localhost:3001";
   }
 
   componentDidMount() {
@@ -83,9 +83,13 @@ class LiveSession extends Component<PropType, AppState> {
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
-  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
+  componentDidUpdate(
+    prevProps: Readonly<{}>,
+    prevState: Readonly<AppState>,
+    snapshot?: any
+  ): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
-    console.log(this.baseUrl)
+    console.log(this.baseUrl);
     console.log({ publisher, subscribers, mainStreamManager });
   }
 
@@ -163,10 +167,10 @@ class LiveSession extends Component<PropType, AppState> {
         this.props.navigate(this.state.mySessionId);
       }
 
-      const subscribersData = [...this.state.subscribers].map(subscriber => {
-        const {clientData} = JSON.parse(subscriber.stream.connection.data)
-        return clientData
-      })
+      const subscribersData = [...this.state.subscribers].map((subscriber) => {
+        const { clientData } = JSON.parse(subscriber.stream.connection.data);
+        return clientData;
+      });
 
       const newParticipant = await axios({
         method: "POST",
@@ -176,26 +180,30 @@ class LiveSession extends Component<PropType, AppState> {
         data: {
           sessionId: this.state.mySessionId,
           participant: this.state.myUserName,
-          subscribers: subscribersData
+          subscribers: subscribersData,
         },
       });
       console.log(subscribersData);
     } catch (error: any) {
-      console.log("There was an error connecting to the session:", error.code, error.message);
+      console.log(
+        "There was an error connecting to the session:",
+        error.code,
+        error.message
+      );
     }
   }
 
   async leaveSession() {
     await axios({
-      method:"DELETE",
+      method: "DELETE",
       // baseURL: this.baseUrl,
       url: "/room-list",
-      headers: {"Content-Type":"application/json"},
+      headers: { "Content-Type": "application/json" },
       data: {
         sessionId: this.state.mySessionId,
-        participant: this.state.myUserName
-      }
-    })
+        participant: this.state.myUserName,
+      },
+    });
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
@@ -209,20 +217,24 @@ class LiveSession extends Component<PropType, AppState> {
       mainStreamManager: undefined,
       publisher: undefined,
     });
-    this.navigate("/")
+    this.navigate("/");
   }
 
   async switchCamera() {
     try {
       const devices = await this.OV!.getDevices();
-      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
 
       if (videoDevices && videoDevices.length > 1) {
         const newVideoDevice = videoDevices.filter(
           (device) =>
             device.deviceId !==
-            this.state.mainStreamManager!.stream.getMediaStream().getVideoTracks()[0].getSettings()
-              .deviceId
+            this.state
+              .mainStreamManager!.stream.getMediaStream()
+              .getVideoTracks()[0]
+              .getSettings().deviceId
         );
 
         if (newVideoDevice.length > 0) {
@@ -252,18 +264,18 @@ class LiveSession extends Component<PropType, AppState> {
   }
 
   async createSession(sessionId: string) {
-   try{
-    const response = await axios({
-      method:"POST",
-      // baseURL: this.baseUrl,
-      url: "/api/sessions",
-      headers: { "Content-Type": "application/json" },
-      data: {customSessionId: sessionId, publishers: "Participant51"},
-    })
-    return response.data; // The sessionId
-  }catch(error){
-    console.log(error)
-  }
+    try {
+      const response = await axios({
+        method: "POST",
+        // baseURL: this.baseUrl,
+        url: "/api/sessions",
+        headers: { "Content-Type": "application/json" },
+        data: { customSessionId: sessionId, publishers: "Participant51" },
+      });
+      return response.data; // The sessionId
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async createToken(sessionId: string) {
@@ -272,7 +284,7 @@ class LiveSession extends Component<PropType, AppState> {
       // baseURL: this.baseUrl,
       url: `api/sessions/${sessionId}/connections`,
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return response.data; // The token
   }
 
@@ -331,7 +343,9 @@ class LiveSession extends Component<PropType, AppState> {
             {this.state.publisher ? (
               <div
                 className="stream-container col-md-6 col-xs-6 block"
-                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+                onClick={() =>
+                  this.handleMainVideoStream(this.state.publisher!)
+                }
               >
                 <UserVideoComponent streamManager={this.state.publisher} />
               </div>
@@ -349,10 +363,9 @@ class LiveSession extends Component<PropType, AppState> {
               ))}
             </div>
             {/* 채팅 컴포넌트 */}
-         <ChatComponent />
+            <ChatComponent />
           </div>
         ) : null}
-         
       </div>
     );
   }
