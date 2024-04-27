@@ -85,11 +85,7 @@ class LiveSession extends Component<PropType, AppState> {
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<{}>,
-    prevState: Readonly<AppState>,
-    snapshot?: any
-  ): void {
+  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
     console.log({ publisher, subscribers, mainStreamManager });
   }
@@ -186,11 +182,7 @@ class LiveSession extends Component<PropType, AppState> {
       });
       console.log(subscribersData);
     } catch (error: any) {
-      console.log(
-        "There was an error connecting to the session:",
-        error.code,
-        error.message
-      );
+      console.log("There was an error connecting to the session:", error.code, error.message);
     }
   }
 
@@ -224,18 +216,14 @@ class LiveSession extends Component<PropType, AppState> {
   async switchCamera() {
     try {
       const devices = await this.OV!.getDevices();
-      const videoDevices = devices.filter(
-        (device) => device.kind === "videoinput"
-      );
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
 
       if (videoDevices && videoDevices.length > 1) {
         const newVideoDevice = videoDevices.filter(
           (device) =>
             device.deviceId !==
-            this.state
-              .mainStreamManager!.stream.getMediaStream()
-              .getVideoTracks()[0]
-              .getSettings().deviceId
+            this.state.mainStreamManager!.stream.getMediaStream().getVideoTracks()[0].getSettings()
+              .deviceId
         );
 
         if (newVideoDevice.length > 0) {
@@ -310,70 +298,70 @@ class LiveSession extends Component<PropType, AppState> {
       <div>
         <Topbar />
         <div className="pt-20">
-        {!session ? (
-          <SignIn
-            roomDefaultValue={mySessionId}
-            userNameDefaultValue={myUserName}
-            handleChangeSessionId={this.handleChangeSessionId}
-            handleChangeUserName={this.handleChangeUserName}
-            joinSession={this.joinSession}
-          />
-        ) : null}
+          {!session ? (
+            <SignIn
+              roomDefaultValue={mySessionId}
+              userNameDefaultValue={myUserName}
+              handleChangeSessionId={this.handleChangeSessionId}
+              handleChangeUserName={this.handleChangeUserName}
+              joinSession={this.joinSession}
+            />
+          ) : null}
 
-        {session ? (
-          <div>
-            <div className="flex flex-row justify-between items-center">
-              <h1>Room Name: {mySessionId}</h1>
-              <div className="flex flex-row gap-3">
-                <Button
-                  size="sm"
-                  color="red"
-                  variant="gradient"
-                  children={"Leave Session"}
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  onClick={this.leaveSession}
-                />
-                <Button
-                  size="sm"
-                  color="amber"
-                  variant="gradient"
-                  children={"Switch Camera"}
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                  onClick={this.switchCamera}
-                />
+          {session ? (
+            <div>
+              <div className="flex flex-row justify-between items-center">
+                <h1>Room Name: {mySessionId}</h1>
+                <div className="flex flex-row gap-3">
+                  <Button
+                    size="sm"
+                    color="red"
+                    variant="gradient"
+                    children={"Leave Session"}
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                    onClick={this.leaveSession}
+                  />
+                  <Button
+                    size="sm"
+                    color="amber"
+                    variant="gradient"
+                    children={"Switch Camera"}
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                    onClick={this.switchCamera}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* {mainStreamManager ? (
+              {/* {mainStreamManager ? (
               <div id="main-video" className="block">
                 <UserVideoComponent streamManager={mainStreamManager} />
               </div>
             ) : null} */}
-            {this.state.publisher ? (
-              <div
-                className="stream-container col-md-6 col-xs-6 block"
-                onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-              >
-                <UserVideoComponent streamManager={this.state.publisher} />
-              </div>
-            ) : null}
-            <div id="video-container" className="block">
-              {this.state.subscribers.map((sub, i) => (
+              {this.state.publisher ? (
                 <div
-                  key={i}
-                  className="row-span-1 col-span-1"
-                  onClick={() => this.handleMainVideoStream(sub)}
+                  className="stream-container col-md-6 col-xs-6 block"
+                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
                 >
-                  {/* <span>{sub.stream.connection.data}</span> */}
-                  <UserVideoComponent streamManager={sub} />
+                  <UserVideoComponent streamManager={this.state.publisher} />
                 </div>
-              ))}
-            </div>
-            {/* <div className="flex flex-row gap-1">
+              ) : null}
+              <div id="video-container" className="block">
+                {this.state.subscribers.map((sub, i) => (
+                  <div
+                    key={i}
+                    className="row-span-1 col-span-1"
+                    onClick={() => this.handleMainVideoStream(sub)}
+                  >
+                    {/* <span>{sub.stream.connection.data}</span> */}
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ))}
+              </div>
+              {/* <div className="flex flex-row gap-1">
               <div className="basis-2/3">
                 {this.state.publisher ? (
                   <div
@@ -395,13 +383,12 @@ class LiveSession extends Component<PropType, AppState> {
                 </div>
               </div>
             </div> */}
-            {/* 채팅 컴포넌트 */}
-            <ChatComponent />
-          </div>
-        ) : null}
-         
+              {/* 채팅 컴포넌트 */}
+              <ChatComponent />
+            </div>
+          ) : null}
+        </div>
       </div>
-      <
     );
   }
 }
