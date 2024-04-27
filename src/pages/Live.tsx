@@ -167,6 +167,7 @@ class LiveSession extends Component<PropType, AppState> {
 
       const newParticipant = await axios({
         method: "POST",
+        // baseURL: this.baseUrl,
         url: "room-list",
         headers: { "Content-Type": "application/json" },
         data: {
@@ -184,6 +185,7 @@ class LiveSession extends Component<PropType, AppState> {
   async leaveSession() {
     await axios({
       method:"DELETE",
+      // baseURL: this.baseUrl,
       url: "/room-list",
       headers: {"Content-Type":"application/json"},
       data: {
@@ -204,6 +206,7 @@ class LiveSession extends Component<PropType, AppState> {
       mainStreamManager: undefined,
       publisher: undefined,
     });
+    this.navigate("/")
   }
 
   async switchCamera() {
@@ -249,6 +252,7 @@ class LiveSession extends Component<PropType, AppState> {
    try{
     const response = await axios({
       method:"POST",
+      // baseURL: this.baseUrl,
       url: "/api/sessions",
       headers: { "Content-Type": "application/json" },
       data: {customSessionId: sessionId, publishers: "Participant51"},
@@ -262,6 +266,7 @@ class LiveSession extends Component<PropType, AppState> {
   async createToken(sessionId: string) {
     const response = await axios({
       method: "POST",
+      // baseURL: this.baseUrl,
       url: `api/sessions/${sessionId}/connections`,
       headers: { "Content-Type": "application/json" },
     })
@@ -271,6 +276,7 @@ class LiveSession extends Component<PropType, AppState> {
   async handleJoinBtn() {
     const newParticipant = await axios({
       method: "POST",
+      // baseURL: this.baseUrl,
       url: "/room-list",
       headers: { "Content-Type": "application/json" },
       data: {
