@@ -44,6 +44,7 @@ class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
   navigate: (url: string) => void;
   params: { sessionId: string };
+  baseUrl: string
 
   constructor(props: PropType) {
     super(props);
@@ -65,6 +66,7 @@ class LiveSession extends Component<PropType, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.baseUrl="http://localhost:3001"
   }
 
   componentDidMount() {
@@ -83,6 +85,7 @@ class LiveSession extends Component<PropType, AppState> {
 
   componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<AppState>, snapshot?: any): void {
     const { publisher, subscribers, mainStreamManager } = this.state;
+    console.log(this.baseUrl)
     console.log({ publisher, subscribers, mainStreamManager });
   }
 
