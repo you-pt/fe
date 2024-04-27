@@ -70,7 +70,7 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
         <CardHeader
           shadow={false}
           floated={false}
-          className=" p-1"
+          className="pb-2"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
@@ -85,6 +85,15 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
               inputRef.current?.click();
             }}
           />}
+          
+          
+        </CardHeader>
+        <CardBody
+        className="h-full"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
           <figure className={`relative h-96 w-full ${img ? "block" : "hidden"}`}>
             <img
               ref={imgRef}
@@ -107,14 +116,6 @@ const ImageUpload = ({ img, imgUrl, handleUpload, setImg, setImgUrl, setAIReport
               />
             </figcaption>
           </figure>
-          
-        </CardHeader>
-        <CardBody
-        className="h-full"
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-        >
           <Button
             variant="outlined"
             className={`w-full h-full hover:scale-105 hover:shadow-none ${
