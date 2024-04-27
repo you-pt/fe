@@ -30,13 +30,16 @@ const ChatComponent: React.FC = () => {
     console.log("보내기");
 
     /**채팅 입력 여부 알려줌 */
-    newSocket.on("typing", ({ name, isTyping }: { name: string; isTyping: boolean }) => {
-      if (isTyping) {
-        setTypingDisplay(`${name} is typing...`);
-      } else {
-        setTypingDisplay("");
+    newSocket.on(
+      "typing",
+      ({ name, isTyping }: { name: string; isTyping: boolean }) => {
+        if (isTyping) {
+          setTypingDisplay(`${name} is typing...`);
+        } else {
+          setTypingDisplay("");
+        }
       }
-    });
+    );
 
     /***언마운트시 소켓 연결 해제 */
     return () => {
@@ -46,9 +49,13 @@ const ChatComponent: React.FC = () => {
   }, []);
 
   const findAllmessages = () => {
-    newSocket.emit("findAllMessages", { roomId: sessionId }, (response: any) => {
-      setMessages(response);
-    });
+    newSocket.emit(
+      "findAllMessages",
+      { roomId: sessionId },
+      (response: any) => {
+        setMessages(response);
+      }
+    );
   };
 
   const join = () => {
@@ -63,9 +70,13 @@ const ChatComponent: React.FC = () => {
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // 기본 동작 방지
     if (socket) {
-      socket.emit("createMessage", { roomId: sessionId, text: messageText }, () => {
-        setMessageText("");
-      });
+      socket.emit(
+        "createMessage",
+        { roomId: sessionId, text: messageText },
+        () => {
+          setMessageText("");
+        }
+      );
     }
   };
 
@@ -118,10 +129,6 @@ const ChatComponent: React.FC = () => {
             ))}
           </div> */}
 
-          {typingDisplay && <div className="typing-display">{typingDisplay}</div>}
-
-          <hr className="my-2" />
-
           <div className="message-input">
             {/* 입력창 바로 위에 메시지가 표시되도록 조정 */}
             <div className="chat-container flex-grow flex flex-col mb-4">
@@ -131,14 +138,15 @@ const ChatComponent: React.FC = () => {
                   <div className="flex-grow">
                     {messages.slice(-5).map((message, index) => (
                       <div key={index} className="mb-1">
-                        <span className="font-bold">{message.name}</span>: {message.text}
+                        <span className="font-bold">{message.name}</span>:{" "}
+                        {message.text}
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
             </div>
-            <form onSubmit={sendMessage} className="flex items-center">
+            <form onSubmit={sendMessage} className="flex items-center w-3/4">
               <label htmlFor="message" className="mr-2">
                 Message:
               </label>

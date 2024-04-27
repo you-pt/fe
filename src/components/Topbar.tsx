@@ -16,13 +16,11 @@ const redirectData = [
   { url: "/signin", name: "로그인" },
   { url: "/signup", name: "회원가입" },
   { url: "/diet", name: "식단 관리 AI" },
-  { url: "/live", name: "라이브 PT" },
 ];
 
 const redirectDataLogin = [
   { url: `/mypage`, name: "마이페이지" },
   { url: "/diet", name: "식단 관리 AI" },
-  { url: "/live", name: "라이브 PT" },
 ];
 
 export default () => {
@@ -48,7 +46,10 @@ export default () => {
 
   return (
     <div className="flex flex-row justify-between px-8 py-2 shadow-md w-screen bg-white h-14 fixed z-50 opacity-100">
-      <button className="flex text-2xl font-extrabold items-center" onClick={goHome}>
+      <button
+        className="flex text-2xl font-extrabold items-center"
+        onClick={goHome}
+      >
         YOU PT
       </button>
       {isLogin ? (

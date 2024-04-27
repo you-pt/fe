@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 
 const socketEndpoint = process.env.REACT_APP_WEBSOCKET_ENDPOINT as string; // NestJS WebSocketGateway의 주소
@@ -48,15 +48,24 @@ function useRealtimeSessionUpdates() {
       }
     };
   }, [location.pathname]);
-  
-   // 컴포넌트가 마운트될 때 한 번만 실행
+
+  // 컴포넌트가 마운트될 때 한 번만 실행
   return sessionList;
 }
 function SessionListComponent() {
   const sessionList = useRealtimeSessionUpdates();
   const navigate = useNavigate();
   if (!sessionList || sessionList.length === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="grid grid-cols-4 gap-4">
+        <div
+          className="p-10 col-span-1 bg-gray-200 text-gray-600 text-lg border-b border-gray-300 flex items-center justify-center cursor-pointer"
+          onClick={() => navigate(`/live`)}
+        >
+          PT룸 생성
+        </div>
+      </div>
+    );
   }
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -78,6 +87,12 @@ function SessionListComponent() {
           </div>
         </div>
       ))}
+      <div
+        className="col-span-1 bg-gray-200 text-gray-600 text-lg border-b border-gray-300 flex items-center justify-center cursor-pointer"
+        onClick={() => navigate(`/live`)}
+      >
+        PT룸 생성
+      </div>
     </div>
   );
 }
