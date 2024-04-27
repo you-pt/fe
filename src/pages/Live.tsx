@@ -341,15 +341,15 @@ class LiveSession extends Component<PropType, AppState> {
                 <UserVideoComponent streamManager={mainStreamManager} />
               </div>
             ) : null} */}
-              {this.state.publisher ? (
-                <div
-                  className="stream-container col-md-6 col-xs-6 block"
-                  onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-                >
-                  <UserVideoComponent streamManager={this.state.publisher} />
-                </div>
-              ) : null}
-              <div id="video-container" className="block">
+              <div className="grid grid-cols-4 grid-rows-2 gap-4">
+                {this.state.publisher ? (
+                  <div
+                    className="row-span-2 col-span-2"
+                    onClick={() => this.handleMainVideoStream(this.state.publisher!)}
+                  >
+                    <UserVideoComponent streamManager={this.state.publisher} />
+                  </div>
+                ) : null}
                 {this.state.subscribers.map((sub, i) => (
                   <div
                     key={i}

@@ -30,16 +30,13 @@ const ChatComponent: React.FC = () => {
     console.log("보내기");
 
     /**채팅 입력 여부 알려줌 */
-    newSocket.on(
-      "typing",
-      ({ name, isTyping }: { name: string; isTyping: boolean }) => {
-        if (isTyping) {
-          setTypingDisplay(`${name} is typing...`);
-        } else {
-          setTypingDisplay("");
-        }
+    newSocket.on("typing", ({ name, isTyping }: { name: string; isTyping: boolean }) => {
+      if (isTyping) {
+        setTypingDisplay(`${name} is typing...`);
+      } else {
+        setTypingDisplay("");
       }
-    );
+    });
 
     /***언마운트시 소켓 연결 해제 */
     return () => {
@@ -49,13 +46,9 @@ const ChatComponent: React.FC = () => {
   }, []);
 
   const findAllmessages = () => {
-    newSocket.emit(
-      "findAllMessages",
-      { roomId: sessionId },
-      (response: any) => {
-        setMessages(response);
-      }
-    );
+    newSocket.emit("findAllMessages", { roomId: sessionId }, (response: any) => {
+      setMessages(response);
+    });
   };
 
   const join = () => {
@@ -70,13 +63,9 @@ const ChatComponent: React.FC = () => {
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // 기본 동작 방지
     if (socket) {
-      socket.emit(
-        "createMessage",
-        { roomId: sessionId, text: messageText },
-        () => {
-          setMessageText("");
-        }
-      );
+      socket.emit("createMessage", { roomId: sessionId, text: messageText }, () => {
+        setMessageText("");
+      });
     }
   };
 
@@ -129,21 +118,25 @@ const ChatComponent: React.FC = () => {
             ))}
           </div> */}
 
-          {typingDisplay && (
-            <div className="typing-display">{typingDisplay}</div>
-          )}
+          {typingDisplay && <div className="typing-display">{typingDisplay}</div>}
 
           <hr className="my-2" />
 
           <div className="message-input">
             {/* 입력창 바로 위에 메시지가 표시되도록 조정 */}
-            <div className="messages-container flex-grow overflow-auto">
-              {messages.map((message, index) => (
-                <div key={index} className="mb-1">
-                  <span className="font-bold">{message.name}</span>:{" "}
-                  {message.text}
+            <div className="chat-container flex-grow flex flex-col mb-4">
+              {/* 메세지가 채팅창 바로 위에 아래서 위로 올라오게 */}
+              <div className="w-3/4 bg-gray-200 p-2 rounded">
+                <div className="messages-container flex-grow overflow-auto flex flex-col-reverse">
+                  <div className="flex-grow">
+                    {messages.slice(-5).map((message, index) => (
+                      <div key={index} className="mb-1">
+                        <span className="font-bold">{message.name}</span>: {message.text}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
             <form onSubmit={sendMessage} className="flex items-center">
               <label htmlFor="message" className="mr-2">
