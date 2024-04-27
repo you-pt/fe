@@ -1,9 +1,11 @@
-import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import { aiReportType } from "./Index";
 
 interface propType {
   reportAI: any;
   loading: 0 | 1 | 2;
+  saveMeal: () => void;
+  reportMeal: () => void;
 }
 
 interface dataType {
@@ -32,7 +34,6 @@ function Dining({ dining }: { dining: dataType }) {
 }
 
 function NutritionalInfo({ nutritionalInfo }: { nutritionalInfo: Partial<dataType> }) {
-  console.log(nutritionalInfo);
   const energy = nutritionalInfo?.["Energy"];
   const carbohydrate = nutritionalInfo?.["Carbohydrate"];
   const fat = nutritionalInfo?.["Fat"];
@@ -74,8 +75,7 @@ function TableRow({ label, value }: { label: string; value: string | undefined }
   );
 }
 
-export default ({ reportAI, loading }: propType) => {
-  console.log(reportAI?.reportAI?.["Diet"]);
+export default ({ reportAI, loading, saveMeal, reportMeal }: propType) => {
   const dining = reportAI?.reportAI?.["Diet"];
   const nutritionalInfo = reportAI?.reportAI?.["Nutritional Info"];
   const evaluation = reportAI?.reportAI?.["Evaluation"];
@@ -94,37 +94,61 @@ export default ({ reportAI, loading }: propType) => {
       >
         {loading === 0 && reportAI && (
           <div>
-            <table className="min-w-full leading-normal">
-              <tr>
-                <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                  음식 이름
-                </th>
-                <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                  열량 (kcal)
-                </th>
-                <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                  탄수화물
-                </th>
-                <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                  단백질
-                </th>
-                <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
-                  지방
-                </th>
-              </tr>
-              {reportAI && dining.map((c: dataType) => <Dining dining={c} />)}
-            </table>
-            <NutritionalInfo nutritionalInfo={nutritionalInfo} />
-            <div className="">
-              <div className="flex flex-row">
-                <div className="w-24 bg-gray-200 p-6">AI 평가</div>
-                <div className="p-6">{evaluation}</div>
+            <div className="flex flex-row justify-end gap-3 mb-2">
+              <Button
+              variant="gradient"
+              color="blue-gray"
+              size="sm"
+                children={"저장하기"}
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+                onClick={saveMeal}
+              />
+              <Button
+              variant="gradient"
+              color="gray"
+              size="sm"
+                children={"트레이너 평가 작성하기"}
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+                onClick={reportMeal}
+              />
+            </div>
+            <div>
+              <table className="min-w-full leading-normal">
+                <tr>
+                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
+                    음식 이름
+                  </th>
+                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
+                    열량 (kcal)
+                  </th>
+                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
+                    탄수화물
+                  </th>
+                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
+                    단백질
+                  </th>
+                  <th className="px-6 py-3 bg-gray-200 text-gray-600 border-b border-gray-300">
+                    지방
+                  </th>
+                </tr>
+                {reportAI && dining.map((c: dataType) => <Dining dining={c} />)}
+              </table>
+              <NutritionalInfo nutritionalInfo={nutritionalInfo} />
+              <div className="">
+                <div className="flex flex-row">
+                  <div className="w-24 bg-gray-200 p-6">AI 평가</div>
+                  <div className="p-6">{evaluation}</div>
+                </div>
               </div>
             </div>
           </div>
         )}
-        {loading === 1  &&
-          (<div className="max-w-full animate-pulse">
+        {loading === 1 && (
+          <div className="max-w-full animate-pulse">
             <div>분석 중...</div>
             <Typography
               as="div"
@@ -173,9 +197,7 @@ export default ({ reportAI, loading }: propType) => {
             ></Typography>
           </div>
         )}
-        {loading === 2 && (
-          <div>분석이 실패했습니다. 다시 시도해주세요.</div>
-        )}
+        {loading === 2 && <div>분석이 실패했습니다. 다시 시도해주세요.</div>}
       </CardBody>
     </Card>
   );

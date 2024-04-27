@@ -112,19 +112,7 @@ export default () => {
         setImgUrl={setImgUrl}
         setAIReport={setAIReport}
       />
-      <AIReport reportAI={aiReport} loading={loading} />
-      {/* <button
-        onClick={saveMeal}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        AI 평가 저장하기
-      </button>
-      <button
-        onClick={reportMeal}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
-      >
-        트레이너 평가 작성하기
-      </button> */}
+      <AIReport reportAI={aiReport} loading={loading} saveMeal={saveMeal} reportMeal={reportMeal}/>
     </div>
   );
 };
