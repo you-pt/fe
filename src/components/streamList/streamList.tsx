@@ -14,6 +14,7 @@ function useRealtimeSessionUpdates() {
   useEffect(() => {
     // 웹소켓 연결
     const newSocket = io(socketEndpoint, {
+      path: "/back/",
       withCredentials: true,
       transports: ["websocket"],
     });
