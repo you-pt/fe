@@ -82,7 +82,7 @@ function SessionListComponent() {
     <div>
       <JoinBtn />
       <div className="grid grid-cols-4 gap-4">
-        {sessionList.map((session, index) => (
+        {(sessionList && sessionList.length !== 0) && sessionList.map((session, index) => (
           <div key={index} className="col-span-1">
             <div className="grid grid-cols-subgrid gap-4 col-span-3">
               <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-2">
