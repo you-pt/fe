@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signin } from "../store/slices/loginSlice";
 import { StateType } from "../store/store";
 import { requestForToken } from "../utils/firebase";
+import { setUser } from "../store/slices/userSlice";
 
 export default () => {
   const [inputs, handleInputs] = useInputs({
@@ -34,6 +35,14 @@ export default () => {
       });
       if (res.status === 201) {
         dispatch(signin());
+        const res = await axios({
+          method: "GET",
+          url: "/user/info",
+          headers: {"Content-Type": "application/json"},
+          withCredentials:true,
+        })
+        const user = res.data
+        dispatch(setUser(user))
         navigate(-1);
       }
     } catch (error) {

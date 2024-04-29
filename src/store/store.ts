@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage"; // 로컬 스토리지 사용
 // import storage from "redux-persist/lib/storage/session"; // session storage
 import loginReducer from "./slices/loginSlice";
+import userReducer from './slices/userSlice'
 
 export interface StateType {
   login: {
@@ -21,13 +22,14 @@ export interface StateType {
 
 export const rootReducer = combineReducers({
   login: loginReducer,
+  user: userReducer
   // 다른 필요한 리듀서 추가 가능
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["login"], // 영구 저장할 리듀서 지정 (rootReducer의 key를 작성하도록)
+  whitelist: ["login", "user"], // 영구 저장할 리듀서 지정 (rootReducer의 key를 작성하도록)
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
