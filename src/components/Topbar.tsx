@@ -7,12 +7,6 @@ import { StateType } from "../store/store";
 import { useCookies } from "react-cookie";
 import { setUser as setUserLocal } from "../store/slices/userSlice";
 
-interface User {
-  email: string;
-  userId: number;
-  nickname: string;
-}
-
 const redirectData = [
   { url: "/signin", name: "로그인" },
   { url: "/signup", name: "회원가입" },
@@ -25,13 +19,13 @@ const redirectDataLogin = [
 ];
 
 export default () => {
-  const [user, setUser] = useState<User | undefined>();
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const navigate = useNavigate();
   const location = useLocation();
   const isLogin = useSelector((state: StateType) => {
     return state.login.isLogin;
   });
+  const user = useSelector((state: StateType) => state.user)
   const dispatch = useDispatch();
 
   const redirect = (url: string): void => {
@@ -55,6 +49,7 @@ export default () => {
       </button>
       {isLogin ? (
         <div className="flex flex-row">
+          <div className="self-center mr-2">{user.nickname} 님</div>
           <ButtonGroup
             variant="outlined"
             placeholder={undefined}
