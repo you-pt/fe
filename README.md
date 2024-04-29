@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/you-pt/fe/assets/64675543/bc080107-966b-4738-86ee-263ae2a1a650" width="350px" />
+</div>
+
 # YOU-PT 당신을 위한 홈 트레이닝 서비스
 
 ## Introduction
@@ -7,7 +11,7 @@
 - 운동 스케줄 관리 기능
 
 ## Getting Started
-- Released Link : 
+- Released Link : [link_1](https://jd-develop.shop/) or [link_2](https://youpt.netlify.app/)
 
 ## Skills
 - Web
