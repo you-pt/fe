@@ -14,7 +14,7 @@ const ChatComponent: React.FC = () => {
   const { sessionId } = useParams();
 
   const newSocket = io(socketEndpoint, {
-    path: "/back/",
+    path: "/socket/",
     withCredentials: true,
     transports: ["websocket"],
   });
@@ -58,6 +58,7 @@ const ChatComponent: React.FC = () => {
       { roomId: sessionId },
       (response: any) => {
         setMessages(response);
+        console.log(response);
       }
     );
   };
