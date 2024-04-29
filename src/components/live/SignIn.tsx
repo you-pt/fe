@@ -8,7 +8,6 @@ import {
   Checkbox,
   Button,
 } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 
 interface PropType {
   roomDefaultValue: string;

@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface userType {
+export interface UserType {
   email: string;
   nickname: string;
   role: "user" | "trainer" | "admin";
 }
 
-const initialState: userType = {
+const initialState: UserType = {
   email: "",
   nickname: "",
   role: "user",

@@ -8,7 +8,6 @@ import {
 } from "openvidu-browser";
 import axios from "axios";
 import React, { Component, ChangeEvent } from "react";
-// import "./Live.css";
 import UserVideoComponent from "../components/UserVideoComponent";
 import SignIn from "../components/live/SignIn";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,6 +15,10 @@ import { JSX } from "react/jsx-runtime";
 import ChatComponent from "../components/ChatComponent";
 import { Button } from "@material-tailwind/react";
 import Topbar from "../components/Topbar";
+import { StateType } from "../store/store";
+import { useSelector } from "react-redux";
+import { UserType } from "../store/slices/userSlice";
+
 
 interface AppState {
   mySessionId: string;
@@ -30,8 +33,11 @@ export const withRouter = (Component: any): React.FC => {
   const Wrapper = (props: any): React.ReactElement => {
     const navigate = useNavigate();
     const params = useParams();
+    const isLogin = useSelector((state: StateType) => state.login.isLogin);
+    const user = useSelector((state: StateType) => state.user)
+  
 
-    return <Component navigate={navigate} params={params} {...props} />;
+    return <Component navigate={navigate} params={params} isLogin={isLogin} user={user} {...props} />;
   };
 
   return Wrapper;
@@ -40,20 +46,23 @@ export const withRouter = (Component: any): React.FC => {
 interface PropType {
   navigate: (url: string) => void;
   params: { sessionId: string };
+  user: UserType;
+  isLogin: boolean
 }
 
 class LiveSession extends Component<PropType, AppState> {
   OV: OpenVidu | null = null;
   navigate: (url: string) => void;
   params: { sessionId: string };
-  baseUrl: string;
+  user: UserType;
 
   constructor(props: PropType) {
     super(props);
+    this.user = this.props.user
 
     this.state = {
       mySessionId: "",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      myUserName: this.props.user ? this.user.nickname : "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
@@ -68,7 +77,6 @@ class LiveSession extends Component<PropType, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.baseUrl = "http://localhost:3001";
   }
 
   componentDidMount() {
@@ -298,16 +306,6 @@ class LiveSession extends Component<PropType, AppState> {
       <div>
         <Topbar />
         <div className="pt-20">
-          {!session ? (
-            <SignIn
-              roomDefaultValue={mySessionId}
-              userNameDefaultValue={myUserName}
-              handleChangeSessionId={this.handleChangeSessionId}
-              handleChangeUserName={this.handleChangeUserName}
-              joinSession={this.joinSession}
-            />
-          ) : null}
-
           {session ? (
             <div>
               <div className="flex flex-row justify-between items-center">
@@ -335,12 +333,6 @@ class LiveSession extends Component<PropType, AppState> {
                   />
                 </div>
               </div>
-
-              {/* {mainStreamManager ? (
-              <div id="main-video" className="block">
-                <UserVideoComponent streamManager={mainStreamManager} />
-              </div>
-            ) : null} */}
               <div className="grid grid-cols-4 grid-rows-2 gap-4">
                 {this.state.publisher ? (
                   <div
@@ -356,37 +348,22 @@ class LiveSession extends Component<PropType, AppState> {
                     className="row-span-1 col-span-1"
                     onClick={() => this.handleMainVideoStream(sub)}
                   >
-                    {/* <span>{sub.stream.connection.data}</span> */}
                     <UserVideoComponent streamManager={sub} />
                   </div>
                 ))}
               </div>
-              {/* <div className="flex flex-row gap-1">
-              <div className="basis-2/3">
-                {this.state.publisher ? (
-                  <div
-                    className=""
-                    onClick={() => this.handleMainVideoStream(this.state.publisher!)}
-                  >
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  </div>
-                ) : null}
-              </div>
-              <div className="basis-1/3">
-                <div className="flex flex-col gap-1">
-                  {this.state.subscribers.map((sub, i) => (
-                    <div key={i} className="" onClick={() => this.handleMainVideoStream(sub)}>
-                      <span>{sub.stream.connection.data}</span>
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div> */}
               {/* 채팅 컴포넌트 */}
               <ChatComponent />
             </div>
-          ) : null}
+          ) : (
+            <SignIn
+              roomDefaultValue={mySessionId}
+              userNameDefaultValue={myUserName}
+              handleChangeSessionId={this.handleChangeSessionId}
+              handleChangeUserName={this.handleChangeUserName}
+              joinSession={this.joinSession}
+            />
+          )}
         </div>
       </div>
     );
