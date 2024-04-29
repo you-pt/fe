@@ -62,7 +62,7 @@ class LiveSession extends Component<PropType, AppState> {
 
     this.state = {
       mySessionId: "",
-      myUserName: this.props.user ? this.user.nickname : "Participant" + Math.floor(Math.random() * 100),
+      myUserName: this.user.nickname ? this.user.nickname : "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
