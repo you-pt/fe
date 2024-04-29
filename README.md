@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/you-pt/fe/assets/64675543/bc080107-966b-4738-86ee-263ae2a1a650" width="400px" />
+</div>
+
 # YOU-PT 당신을 위한 홈 트레이닝 서비스
 
 ## Introduction
