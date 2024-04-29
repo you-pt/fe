@@ -13,7 +13,11 @@ const ChatComponent: React.FC = () => {
   const [typingDisplay, setTypingDisplay] = useState("");
   const { sessionId } = useParams();
 
-  const newSocket = io(socketEndpoint);
+  const newSocket = io(socketEndpoint, {
+    path: "/socket/",
+    withCredentials: true,
+    transports: ["websocket"],
+  });
   useEffect(() => {
     console.log(sessionId);
 
@@ -54,6 +58,7 @@ const ChatComponent: React.FC = () => {
       { roomId: sessionId },
       (response: any) => {
         setMessages(response);
+        console.log(response);
       }
     );
   };
