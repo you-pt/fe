@@ -1,5 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import { aiReportType } from "./Index";
+import { useSelector } from "react-redux";
+import { StateType } from "../../store/store";
 
 interface propType {
   reportAI: any;
@@ -79,6 +81,8 @@ export default ({ reportAI, loading, saveMeal, reportMeal }: propType) => {
   const dining = reportAI?.reportAI?.["Diet"];
   const nutritionalInfo = reportAI?.reportAI?.["Nutritional Info"];
   const evaluation = reportAI?.reportAI?.["Evaluation"];
+  const isLogin = useSelector((state: StateType) => state.login.isLogin);
+  const user = useSelector((state: StateType) => state.user);
 
   return (
     <Card
@@ -95,26 +99,30 @@ export default ({ reportAI, loading, saveMeal, reportMeal }: propType) => {
         {loading === 0 && reportAI && (
           <div>
             <div className="flex flex-row justify-end gap-3 mb-2">
-              <Button
-              variant="gradient"
-              color="blue-gray"
-              size="sm"
-                children={"저장하기"}
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                onClick={saveMeal}
-              />
-              <Button
-              variant="gradient"
-              color="gray"
-              size="sm"
-                children={"트레이너 평가 작성하기"}
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                onClick={reportMeal}
-              />
+              {isLogin && (
+                <Button
+                  variant="gradient"
+                  color="blue-gray"
+                  size="sm"
+                  children={"저장하기"}
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  onClick={saveMeal}
+                />
+              )}
+              {isLogin && user.role === "trainer" && (
+                <Button
+                  variant="gradient"
+                  color="gray"
+                  size="sm"
+                  children={"트레이너 평가 작성하기"}
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  onClick={reportMeal}
+                />
+              )}
             </div>
             <div>
               <table className="min-w-full leading-normal">

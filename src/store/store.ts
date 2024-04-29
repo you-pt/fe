@@ -17,6 +17,11 @@ import userReducer from './slices/userSlice'
 export interface StateType {
   login: {
     isLogin: boolean
+  };
+  user: {
+    email: string,
+    nickname: string,
+    role: "user" | "trainer" | "admin"
   }
 }
 
