@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { loginState, signout } from "../store/slices/loginSlice";
 import { StateType } from "../store/store";
 import { useCookies } from "react-cookie";
+import { setUser as setUserLocal } from "../store/slices/userSlice";
 
 interface User {
   email: string;
@@ -41,7 +42,7 @@ export default () => {
   };
   const handleLogout = () => {
     dispatch(signout());
-    // if ()
+    dispatch(setUserLocal({email: "", nickname: "", role: "user"}))
   };
 
   return (
