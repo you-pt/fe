@@ -7,7 +7,7 @@
 - 운동 스케줄 관리 기능
 
 ## Getting Started
-- Released Link : 
+- Released Link : [link_1](https://jd-develop.shop/) or [link_2](https://youpt.netlify.app/)
 
 ## Skills
 - Web
