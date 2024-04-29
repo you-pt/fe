@@ -11,6 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { CookiesProvider } from "react-cookie";
 
 axios.defaults.baseURL=process.env.REACT_APP_BASE_URL
+axios.defaults.withCredentials=true
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(

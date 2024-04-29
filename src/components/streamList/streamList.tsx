@@ -1,3 +1,5 @@
+import { Button } from "@material-tailwind/react";
+import { div } from "@tensorflow/tfjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
@@ -53,46 +55,51 @@ function useRealtimeSessionUpdates() {
   // 컴포넌트가 마운트될 때 한 번만 실행
   return sessionList;
 }
+
+function JoinBtn() {
+  const navigate = useNavigate();
+  return (
+    <div className="flex justify-center">
+      <Button
+        className="mt-6 text-black drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)]"
+        color="white"
+        size="lg"
+        children={"PT룸 생성"}
+        onClick={() => navigate(`/live`)}
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      />
+    </div>
+  );
+}
+
 function SessionListComponent() {
   const sessionList = useRealtimeSessionUpdates();
   const navigate = useNavigate();
-  if (!sessionList || sessionList.length === 0) {
-    return (
-      <div className="grid grid-cols-4 gap-4">
-        <div
-          className="p-10 col-span-1 bg-gray-200 text-gray-600 text-lg border-b border-gray-300 flex items-center justify-center cursor-pointer"
-          onClick={() => navigate(`/live`)}
-        >
-          PT룸 생성
-        </div>
-      </div>
-    );
-  }
+
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {sessionList.map((session, index) => (
-        <div key={index} className="col-span-1">
-          <div className="grid grid-cols-subgrid gap-4 col-span-3">
-            <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-2">
-              {session.sessionName}
+    <div>
+      <JoinBtn />
+      <div className="grid grid-cols-4 gap-4">
+        {sessionList.map((session, index) => (
+          <div key={index} className="col-span-1">
+            <div className="grid grid-cols-subgrid gap-4 col-span-3">
+              <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-2">
+                {session.sessionName}
+              </div>
+              <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-1">
+                참여자 수: {session.participantNumber}
+              </div>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => navigate(`/live/${session.sessionName}`)}
+              >
+                Join
+              </button>
             </div>
-            <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-1">
-              참여자 수: {session.participantNumber}
-            </div>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => navigate(`/live/${session.sessionName}`)}
-            >
-              Join
-            </button>
           </div>
-        </div>
-      ))}
-      <div
-        className="col-span-1 bg-gray-200 text-gray-600 text-lg border-b border-gray-300 flex items-center justify-center cursor-pointer"
-        onClick={() => navigate(`/live`)}
-      >
-        PT룸 생성
+        ))}
       </div>
     </div>
   );
