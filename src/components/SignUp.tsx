@@ -11,8 +11,9 @@ import {
   ListItemPrefix,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { InputType, handleSubmit, useInputs } from "../utils/inputUtils";
+import { InputType, useInputs } from "../utils/inputUtils";
 import { useEffect } from "react";
+import axios from "axios";
 
 const options = [
   { value: "user", label: "일반 사용자" },
@@ -27,14 +28,29 @@ export default () => {
     password: "",
     passwordConfirm: "",
     role: "",
+    gender: "",
   });
-
 
   useEffect(() => {
     console.log(inputs);
   }, [inputs]);
 
   const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await axios({
+      method: "POST",
+      url: "user/register",
+      data: inputs,
+    })
+    if (res.status === 201){
+      navigate("/signin");
+    }else{
+      alert("다시 시도해주세요.")
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <Card
@@ -207,7 +223,6 @@ export default () => {
                   label="남성"
                   value="male"
                   onChange={handleInputs as React.ChangeEventHandler}
-                  defaultChecked
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                   crossOrigin={undefined}
@@ -224,34 +239,13 @@ export default () => {
               </div>
             </div>
           </div>
-          {/* <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
-                I agree the
-                <a href="#" className="font-medium transition-colors hover:text-gray-900">
-                  &nbsp;Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-            crossOrigin={undefined}
-          /> */}
           <Button
+            onClick={(e) => handleSubmit(e)}
             className="mt-6"
             fullWidth
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={() => handleSubmit("/user/register", inputs as InputType)}
           >
             회원가입
           </Button>
