@@ -86,15 +86,15 @@ function JoinBtn() {
 const collapse = {
   position: "fixed",
   left: "50%",
-  transform: "translate(-50%, -50%)",
-  top: "50%",
+  top: "calc(100vh - 110px)",
+  transform: "translate(-50%, 0)",
 } as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 const expand = {
   position: "fixed",
   left: "50%",
-  top: "calc(100vh - 110px)",
-  transform: "translate(-50%, 0)",
+  transform: "translate(-50%, -50%)",
+  top: "50%",
 } as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 function SessionListComponent() {
@@ -105,7 +105,9 @@ function SessionListComponent() {
   return (
     <div className="">
       <JoinBtn />
-      <div style={showList ? expand : collapse}>
+      <div
+        style={showList ? expand : collapse}
+      >
         <Card
           className="w-96 h-96 mt-16"
           placeholder={undefined}
