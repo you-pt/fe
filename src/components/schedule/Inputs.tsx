@@ -11,10 +11,10 @@ import { useInputs } from "../../utils/inputUtils";
 import { useEffect } from "react";
 
 interface InputType {
-  ptDate: string,
-  ptTime: string,
-  content: string,
-  userId: string
+  ptDate: string;
+  ptTime: string;
+  content: string;
+  userId: string;
 }
 
 export default () => {
@@ -22,7 +22,7 @@ export default () => {
     ptDate: "",
     ptTime: "",
     content: "",
-    userId: ""
+    userId: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +48,10 @@ export default () => {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       >
-        <Option children={"수강생 1"} onClick={(e) => handleInputs(e, {name: "userId", value: "수강생 1"})} />
+        <Option
+          children={"수강생 1"}
+          onClick={(e) => handleInputs(e, { name: "userId", value: 5 })}
+        />
       </Select>
       <Input
         type="date"
@@ -79,7 +82,7 @@ export default () => {
       />
       <Button
         type="submit"
-        size='sm'
+        size="sm"
         color="cyan"
         children={"스케줄 작성하기"}
         placeholder={undefined}
