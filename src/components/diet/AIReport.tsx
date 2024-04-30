@@ -78,9 +78,10 @@ function TableRow({ label, value }: { label: string; value: string | undefined }
 }
 
 export default ({ reportAI, loading, saveMeal, reportMeal }: propType) => {
+  console.log(reportAI)
   const dining = reportAI?.reportAI?.["Diet"];
   const nutritionalInfo = reportAI?.reportAI?.["Nutritional Info"];
-  const evaluation = reportAI?.reportAI?.["Evaluation"];
+  const evaluation = reportAI?.reportAI?.["EvaluationTranslated"];
   const isLogin = useSelector((state: StateType) => state.login.isLogin);
   const user = useSelector((state: StateType) => state.user);
 
