@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  CardHeader,
   IconButton,
   List,
   ListItem,
@@ -86,14 +87,15 @@ const collapse = {
   position: "fixed",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  top: "50%"
-} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+  top: "50%",
+} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 const expand = {
   position: "fixed",
   left: "50%",
+  top: "calc(100vh - 110px)",
   transform: "translate(-50%, 0)",
-} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 function SessionListComponent() {
   const sessionList = useRealtimeSessionUpdates();
@@ -103,16 +105,15 @@ function SessionListComponent() {
   return (
     <div className="">
       <JoinBtn />
-      <div
-        style={showList ? expand : collapse} 
-      >
+      <div style={showList ? expand : collapse}>
         <Card
-          className="w-96 mt-16 opacity-95"
+          className="w-96 h-96 mt-16"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
           <List
+            className="bg-slate-300 hover:bg-slate-600"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
@@ -135,10 +136,17 @@ function SessionListComponent() {
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
-                  {"방 목록 보기"}
+                  {!showList ? "방 목록 가리기" : "방 목록 보기"}
                 </Typography>
               </div>
             </ListItem>
+          </List>
+          <List
+            className="overflow-y-auto"
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          >
             {sessionList &&
               sessionList.length !== 0 &&
               sessionList.map((session, index) => (
