@@ -1,6 +1,14 @@
-import { Button } from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  IconButton,
+  List,
+  ListItem,
+  ListItemSuffix,
+  Typography,
+} from "@material-tailwind/react";
 import { div } from "@tensorflow/tfjs";
-import { useEffect, useState } from "react";
+import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 
@@ -74,32 +82,116 @@ function JoinBtn() {
   );
 }
 
+const collapse = {
+  position: "fixed",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  top: "50%"
+} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
+const expand = {
+  position: "fixed",
+  left: "50%",
+  transform: "translate(-50%, 0)",
+} as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
 function SessionListComponent() {
   const sessionList = useRealtimeSessionUpdates();
   const navigate = useNavigate();
+  const [showList, setShowList] = useState(false);
 
   return (
-    <div>
+    <div className="">
       <JoinBtn />
-      <div className="grid grid-cols-4 gap-4">
-        {(sessionList && sessionList.length !== 0) && sessionList.map((session, index) => (
-          <div key={index} className="col-span-1">
-            <div className="grid grid-cols-subgrid gap-4 col-span-3">
-              <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-2">
-                {session.sessionName}
+      <div
+        style={showList ? expand : collapse} 
+      >
+        <Card
+          className="w-96 mt-16 opacity-95"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
+          <List
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          >
+            <ListItem
+              ripple={false}
+              className="py-1 pr-1 pl-4"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+              onClick={() => {
+                setShowList((prev) => !prev);
+              }}
+            >
+              <div>
+                <Typography
+                  variant="h6"
+                  color="blue-gray"
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                >
+                  {"방 목록 보기"}
+                </Typography>
               </div>
-              <div className="bg-gray-200 text-gray-600 border-b border-gray-300 p-4 col-span-1">
-                참여자 수: {session.participantNumber}
-              </div>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => navigate(`/live/${session.sessionName}`)}
-              >
-                Join
-              </button>
-            </div>
-          </div>
-        ))}
+            </ListItem>
+            {sessionList &&
+              sessionList.length !== 0 &&
+              sessionList.map((session, index) => (
+                <ListItem
+                  key={session.sessionName}
+                  ripple={false}
+                  className="py-1 pr-1 pl-4"
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                >
+                  <div>
+                    <Typography
+                      variant="h6"
+                      color="blue-gray"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
+                      {session.sessionName}
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="font-normal"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
+                      참여자 수: {session.participantNumber}
+                    </Typography>
+                  </div>
+
+                  <ListItemSuffix
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  >
+                    <IconButton
+                      onClick={() => navigate(`/live/${session.sessionName}`)}
+                      variant="text"
+                      color="blue-gray"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
+                      {"->"}
+                    </IconButton>
+                  </ListItemSuffix>
+                </ListItem>
+              ))}
+          </List>
+        </Card>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ initializeApp(firebaseConfig);
 const messaging = getMessaging();
 
 export const requestForToken = () => {
+  console.log(process.env.REACT_APP_VAPID_KEY)
   return getToken(messaging, {vapidKey: process.env.REACT_APP_VAPID_KEY})
   .then((currentToken) => {
     if (currentToken) {

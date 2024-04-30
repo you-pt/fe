@@ -31,10 +31,6 @@ export default () => {
     gender: "",
   });
 
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

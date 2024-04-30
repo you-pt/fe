@@ -9,11 +9,8 @@ const Main = () => {
   return (
     <div>
       <Notification />
-      <div className="fixed z-50 opacity-100">
-        <Topbar />
-      </div>
+      <Topbar />
       <div
-        className="bg-slate-800"
         style={{
           backgroundImage: `url(${GymImage})`,
           backgroundSize: "cover", // 이미지를 화면에 맞게 조절하여 꽉 채움
@@ -25,9 +22,15 @@ const Main = () => {
         }}
       >
         <div className="w-full text-center text-7xl subpixel-antialiased font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)]">
-          <div className="drop-shadow-2xl mt-20 animate-fade-down animate-once animate-delay-[50ms]">당신을 위한</div>
-          <div className="mt-12 animate-slide-in-top animate-fade-down animate-once animate-delay-[200ms]">홈 트레이닝 서비스</div>
-          <div className="mt-12 text-6xl font-extrabold animate-fade-down animate-once animate-delay-[450ms]">↓</div>
+          <div className="drop-shadow-2xl mt-20 animate-fade-down animate-once animate-delay-[50ms]">
+            당신을 위한
+          </div>
+          <div className="mt-12 animate-slide-in-top animate-fade-down animate-once animate-delay-[200ms]">
+            홈 트레이닝 서비스
+          </div>
+          <div className="mt-12 text-6xl font-extrabold animate-fade-down animate-once animate-delay-[450ms]">
+            ↓
+          </div>
         </div>
         <SessionListComponent />
       </div>
