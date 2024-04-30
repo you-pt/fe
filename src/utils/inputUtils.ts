@@ -32,7 +32,7 @@ export const handleSubmit = async (
   withCredentials: boolean = false
 ) => {
   if (!data) return;
-  const req = await axios({
+  const res = await axios({
     method: "POST",
     url,
     headers: {
@@ -43,6 +43,6 @@ export const handleSubmit = async (
     data,
     withCredentials,
   });
-  return req;
+  return res;
 };
 
