@@ -76,7 +76,9 @@ export default () => {
           {trainers.map((trainer: TrainerType) => (
             <Option
               children={trainer.nickname}
-              onClick={(e) => handleInputs(e, { name: "userId", value: trainer.id })}
+              onClick={(e) =>
+                handleInputs(e, { name: "userId", value: trainer.id })
+              }
             />
           ))}
         </Select>

@@ -50,7 +50,7 @@ const ChatComponent: React.FC = () => {
       clearInterval(intervalId);
       newSocket.disconnect();
     };
-  }, []);
+  }, [sessionId]);
 
   const findAllmessages = () => {
     newSocket.emit(
