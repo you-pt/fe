@@ -138,7 +138,7 @@ function SessionListComponent() {
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
-                  {!showList ? "방 목록 가리기" : "방 목록 보기"}
+                  {showList ? "방 목록 가리기" : "방 목록 보기"}
                 </Typography>
               </div>
             </ListItem>
