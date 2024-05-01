@@ -86,7 +86,7 @@ function JoinBtn() {
 const collapse = {
   position: "fixed",
   left: "50%",
-  top: "calc(100vh - 110px)",
+  top: "calc(100vh - 160px)",
   transform: "translate(-50%, 0)",
 } as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
@@ -105,9 +105,7 @@ function SessionListComponent() {
   return (
     <div className="">
       <JoinBtn />
-      <div
-        style={showList ? expand : collapse}
-      >
+      <div style={showList ? expand : collapse}>
         <Card
           className="w-96 h-96 mt-16"
           placeholder={undefined}
@@ -138,7 +136,7 @@ function SessionListComponent() {
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
-                  {showList ? "방 목록 가리기" : "방 목록 보기"}
+                  {showList ? "방 목록 가리기" : "방 목록 크게 보기"}
                 </Typography>
               </div>
             </ListItem>
@@ -149,7 +147,7 @@ function SessionListComponent() {
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            {
+            {sessionList && sessionList.length !== 0 ? (
               sessionList.map((session, index) => (
                 <ListItem
                   key={session.sessionName}
@@ -198,7 +196,15 @@ function SessionListComponent() {
                     </IconButton>
                   </ListItemSuffix>
                 </ListItem>
-              ))}
+              ))
+            ) : (
+              <ListItem
+                children={"방 없음"}
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
+            )}
           </List>
         </Card>
       </div>
