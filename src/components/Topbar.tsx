@@ -14,7 +14,7 @@ const redirectData = [
 ];
 
 const redirectDataLogin = [
-  { url: `/mypage`, name: "마이페이지" },
+  { url: `/schedule`, name: "PT 신청" },
   { url: "/diet", name: "식단 관리 AI" },
 ];
 

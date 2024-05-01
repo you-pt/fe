@@ -149,8 +149,7 @@ function SessionListComponent() {
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            {sessionList &&
-              sessionList.length !== 0 &&
+            {
               sessionList.map((session, index) => (
                 <ListItem
                   key={session.sessionName}

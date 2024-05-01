@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Topbar from "../components/Topbar";
 import ScheduleInputs from "../components/schedule/Inputs";
 import ScheduleLists from "../components/schedule/Lists";
@@ -10,6 +10,7 @@ import { StateType } from "../store/store";
 function MyPage() {
   const isLogin = useSelector((state: StateType) => state.login.isLogin);
   const navigate = useNavigate();
+  const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
     if (!isLogin) {
@@ -18,13 +19,22 @@ function MyPage() {
     }
   }, [isLogin]);
 
+  const getSchedule = useCallback(async () => {
+    const scheduleList = await axios({
+      method: "GET",
+      url: "/schedule",
+      withCredentials: true,
+    });
+    setSchedules(scheduleList.data);
+  }, [schedules]);
+
   return (
     <div>
       <Topbar />
       <div className="pt-20">
         <div className="flex flex-row">
-          <ScheduleInputs />
-          <ScheduleLists />
+          <ScheduleInputs schedules={schedules} getSchedule={getSchedule} />
+          <ScheduleLists schedules={schedules} />
         </div>
       </div>
     </div>

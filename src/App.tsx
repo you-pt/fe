@@ -34,7 +34,7 @@ function App() {
       <Route path="/list" element={<SessionListComponent />} />
       <Route path="/live/:sessionId?" element={<LiveSession />} />
       <Route path="/chat" element={<ChatComponent />} />
-      <Route path="/mypage" element={<MyPage />} />
+      <Route path="/schedule" element={<MyPage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/signin" element={<SignIn />} />
     </Routes>
