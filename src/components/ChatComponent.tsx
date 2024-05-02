@@ -2,6 +2,8 @@ import { useState, useEffect /** , ChangeEvent, FormEvent*/ } from "react";
 import { io, Socket } from "socket.io-client";
 import "./Chat.css";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 const socketEndpoint = process.env.REACT_APP_WEBSOCKET_ENDPOINT as string;
 
 const ChatComponent: React.FC = () => {
@@ -12,6 +14,43 @@ const ChatComponent: React.FC = () => {
   const [name, setName] = useState("");
   const [typingDisplay, setTypingDisplay] = useState("");
   const { sessionId } = useParams();
+  // useSelector 훅을 사용하여 Redux 상태에서 사용자 정보를 가져옵니다.
+  const user = useSelector((state: RootState) => state.user);
+
+  // 사용자의 닉네임을 가져옵니다.
+  // 무작위 닉네임 생성 함수
+  const generateRandomNickname = (): string => {
+    const adjectives = [
+      "흔들린",
+      "어이없는",
+      "빈약한",
+      "탐스러운",
+      "풍부한",
+      "즐거운",
+    ];
+    const nouns = [
+      "삼두근",
+      "이두근",
+      "햄스트링",
+      "대흉근",
+      "전완근",
+      "대원근",
+      "광배근",
+      "승모근",
+      "안면근육",
+    ];
+    const randomAdjective =
+      adjectives[Math.floor(Math.random() * adjectives.length)];
+    const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+    return `${randomAdjective}${randomNoun}`;
+  };
+
+  // 로그인 시에만 실행되는 useEffect
+  useEffect(() => {
+    // 사용자의 닉네임을 가져옵니다.
+    const defaultUserName = user.nickname || generateRandomNickname();
+    setName(defaultUserName);
+  }, [user]);
 
   const newSocket = io(socketEndpoint, {
     path: "/socket/",
@@ -77,7 +116,7 @@ const ChatComponent: React.FC = () => {
     if (socket) {
       socket.emit(
         "createMessage",
-        { roomId: sessionId, text: messageText },
+        { roomId: sessionId, name: name, text: messageText },
         () => {
           setMessageText("");
         }

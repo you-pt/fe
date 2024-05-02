@@ -45,7 +45,6 @@ function useRealtimeSessionUpdates() {
       };
     });
     newSocket.on("sessionInfo", (sessionInfo: SessionInfo[]) => {
-      console.log("Received sessionInfo:", sessionInfo);
       setSessionList(sessionInfo);
     });
     setSocket(newSocket);
