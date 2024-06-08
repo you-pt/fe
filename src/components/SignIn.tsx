@@ -8,19 +8,32 @@ import { signin } from "../store/slices/loginSlice";
 import { StateType } from "../store/store";
 import { requestForToken } from "../utils/firebase";
 import { setUser } from "../store/slices/userSlice";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface Inputs {
+  email: string;
+  password: string;
+}
 
 export default () => {
-  const [inputs, handleInputs] = useInputs({
-    email: "",
-    password: "",
-  });
-
   const isLogin = useSelector((state: StateType) => state.login.isLogin);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const handleSignInBtn = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  // const onSubmit: SubmitHandler<Inputs> = (data) => {
+  //   console.log(errors)
+  //   console.log(data);
+  // };
+
+  const onInvalid = (errors: any) => console.error(errors)
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const token: any = await requestForToken();
       const res = await axios({
@@ -29,19 +42,19 @@ export default () => {
         headers: {
           "Content-Type": "application/json",
         },
-        data: {...inputs, token},
-        withCredentials: true
+        data: { ...data, token },
+        withCredentials: true,
       });
       if (res.status === 201) {
         dispatch(signin());
         const res = await axios({
           method: "GET",
           url: "/user/info",
-          headers: {"Content-Type": "application/json"},
-          withCredentials:true,
-        })
-        const user = res.data
-        dispatch(setUser(user))
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+        const user = res.data;
+        dispatch(setUser(user));
         navigate(-1);
       }
     } catch (error) {
@@ -67,7 +80,7 @@ export default () => {
         >
           로그인
         </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
           <div className="mb-1 flex flex-col gap-6">
             <Typography
               variant="h6"
@@ -86,12 +99,16 @@ export default () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              {...register("email", {
+                required: true,
+                pattern: /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+              })}
               name="email"
-              onChange={handleInputs as React.ChangeEventHandler}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               crossOrigin={undefined}
             />
+            {errors.email && <span style={{color: "#f00"}}>이메일 형식으로 작성해주세요.</span>}
             <Typography
               variant="h6"
               color="blue-gray"
@@ -105,28 +122,29 @@ export default () => {
             <Input
               type="password"
               size="lg"
-              placeholder="********"
+              placeholder="대문자와 특수문자를 넣어주세요"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              {...register("password", {
+                required: true,
+                maxLength: 40,
+                pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_-])[A-Za-z0-9!@#$%^&*()_-]{8,40}$/g,
+              })}
               name="password"
-              onChange={handleInputs as React.ChangeEventHandler}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               crossOrigin={undefined}
             />
+            {errors.password && <span style={{color: "#f00"}}>대문자와 소문자, 특수문자를 포함해 8자리 이상 작성해주세요.</span>}
           </div>
-          <Button
-            className="mt-6"
-            fullWidth
-            placeholder={undefined}
+          <Input
+            type="submit"
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
-            onClick={handleSignInBtn}
-          >
-            로그인
-          </Button>
+            crossOrigin={undefined}
+          />
           <Typography
             color="gray"
             className="mt-4 text-center font-normal"
