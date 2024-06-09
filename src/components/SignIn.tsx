@@ -26,10 +26,6 @@ export default () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  // const onSubmit: SubmitHandler<Inputs> = (data) => {
-  //   console.log(errors)
-  //   console.log(data);
-  // };
 
   const onInvalid = (errors: any) => console.error(errors)
 
