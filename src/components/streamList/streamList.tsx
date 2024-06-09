@@ -64,7 +64,7 @@ function useRealtimeSessionUpdates() {
   return sessionList;
 }
 
-function JoinBtn() {
+export function JoinBtn() {
   const navigate = useNavigate();
   return (
     <div className="flex justify-center">
@@ -103,7 +103,6 @@ function SessionListComponent() {
 
   return (
     <div className="">
-      <JoinBtn />
       <div style={showList ? expand : collapse}>
         <Card
           className="w-96 h-96 mt-16"
