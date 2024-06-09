@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loginState, signout } from "../store/slices/loginSlice";
@@ -18,7 +18,7 @@ const redirectDataLogin = [
   { url: "/diet", name: "식단 관리 AI" },
 ];
 
-export default () => {
+export default React.memo(() => {
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -96,4 +96,4 @@ export default () => {
       )}
     </div>
   );
-};
+})

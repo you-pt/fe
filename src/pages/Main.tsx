@@ -1,9 +1,9 @@
 import React from "react";
 import Topbar from "../components/Topbar";
 import GymImage from "../assets/gym.avif";
+import { JoinBtn } from "../components/streamList/streamList";
 import SessionListComponent from "../components/streamList/streamList";
 import Notification from "../components/Notification";
-import axios from "axios";
 
 const Main = () => {
   return (
@@ -32,10 +32,11 @@ const Main = () => {
             ↓
           </div>
         </div>
+        <JoinBtn />
         <SessionListComponent />
       </div>
     </div>
   );
 };
 
-export default Main;
+export default React.memo(Main);

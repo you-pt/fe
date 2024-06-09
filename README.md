@@ -19,14 +19,12 @@
   - TypeScript
   - React-Router-Dom
   - Redux-Toolkit
+  - React Hook Form
   - Tailwind CSS
 - WebRTC
-  - OpenVIDU
+  - OpenVidu
 - Web Socket
   - Socket.IO-Client
-
-## License
-MIT License
 
 ## Contributors
   - [zindong](https://github.com/Jindonglee)
